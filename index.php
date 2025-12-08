@@ -74,23 +74,14 @@
 
     // Notificaciones en primer plano
     onMessage(messaging, (payload) => {
-      console.log("📩 Notificación recibida en primer plano:", payload);
+      console.log("📩 Notificación en primer plano:", payload);
 
-      if (document.visibilityState === "visible") {
-        return;
-      }
-
-      if (Notification.permission !== "granted") return;
-
-      const notif = payload.notification || {};
-      const options = {
-        body: notif.body || "",
-        icon: notif.icon || "./img/IconAndroid/iconxhdpi.png",
-        image: notif.image || undefined,
-      };
-
-      new Notification(notif.title || "TvGo NZK", options);
+      // Aquí podrías, si quieres, mostrar un aviso dentro de la web:
+      // - un toast
+      // - actualizar un badge de "nuevas noticias"
+      // Pero NO crear new Notification(...), porque ya lo hace el SW.
     });
+
   </script>
 
   <!-- Google Analytics -->

@@ -74,14 +74,14 @@
 
     // Notificaciones en primer plano
     onMessage(messaging, (payload) => {
-      console.log("📩 Notificación recibida:", payload);
-      if (Notification.permission === "granted") {
-        new Notification(payload.notification.title, {
-          body: payload.notification.body,
-          icon: "./img/IconAndroid/iconxhdpi.png"
-        });
-      }
-    });
+  console.log("📩 Notificación en primer plano:", payload);
+
+  // Aquí podrías, si quieres, mostrar un aviso dentro de la web:
+  // - un toast
+  // - actualizar un badge de "nuevas noticias"
+  // Pero NO crear new Notification(...), porque ya lo hace el SW.
+});
+
   </script>
 
   <!-- Google Analytics -->

@@ -139,14 +139,18 @@ messaging.onBackgroundMessage((payload) => {
   console.log("[SW] Notificación en background:", payload);
 
   const notif = payload.notification || {};
+  const data  = payload.data || {};
 
-  const title = notif.title || "TvGo NZK";
+  const title = data.title || notif.title || "TvGo NZK";
+  const body  = data.body  || notif.body  || "";
+  const image = data.image || notif.image;
+
   const options = {
-    body: notif.body || "",
-    icon: notif.icon || "/img/IconAndroid/iconxhdpi.png",
-    // 👇 Esto permite que aparezca la IMAGEN grande si la envías desde Firebase Console
-    image: notif.image || undefined,
-    badge: "/img/IconAndroid/iconhdpi.png",
+    body,
+    // 👇 Forzamos SIEMPRE nuestro icono local
+    icon: "/img/icon-192.png",
+    badge: "/img/icon-192.png",
+    image: image || undefined,
   };
 
   self.registration.showNotification(title, options);
