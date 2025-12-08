@@ -1,0 +1,1850 @@
+/* ============================================
+   RESET BÁSICO
+============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #050b18;
+  color: #f5f7ff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================
+   HEADER TIPO PLATAFORMA (Inspirado en tvGO)
+============================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(5, 11, 24, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.header-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* LOGO */
+.logo.logo-img {
+  font-size: 0;
+}
+.logo.logo-img img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+/* NAV DESKTOP */
+.main-nav {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.main-nav a {
+  position: relative;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  opacity: 0.8;
+  font-size: 0.85rem;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.18s ease;
+}
+
+.main-nav a:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.main-nav a.is-active {
+  background: rgba(255, 255, 255, 0.14);
+  opacity: 1;
+}
+
+.main-nav a.nav-live {
+  font-weight: 600;
+  color: #ff4a4a;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ff4a4a;
+  box-shadow: 0 0 8px rgba(255, 74, 74, 0.9);
+}
+
+/* HAMBURGER (no se usará) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.35rem;
+}
+
+/* ============================================
+   BOTÓN ACCIÓN PORTAL NOTICIAS (BORDE DEGRADADO)
+============================================ */
+.action-gradient-btn {
+  position: relative;
+  padding: 0.55rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1.3px solid transparent;
+  background:
+    linear-gradient(#050b18, #050b18) padding-box,
+    linear-gradient(90deg, #ff005e, #00c6ff, #8a2cff) border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.25s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.action-gradient-btn:hover {
+  background:
+    linear-gradient(#080f25, #080f25) padding-box,
+    linear-gradient(90deg, #ff005e, #00c6ff, #8a2cff) border-box;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   CONTENEDOR GLOBAL
+============================================ */
+.page {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 4rem;
+}
+
+/* ============================================
+   BANNERS PARA PUBLICIDAD
+============================================ */
+.banner-slot {
+  margin: 0.5rem;
+}
+
+.banner-placeholder {
+  border-radius: 0.75rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.banner-slot img.banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* ============================================
+   HOME: HERO CINEMATOGRÁFICO NZK tvGO
+============================================ */
+
+.page-home .hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
+  gap: 2.6rem;
+  align-items: stretch;
+  margin: 1.5rem 0 3rem;
+  padding: 2.6rem 2.4rem;
+  border-radius: 28px;
+  background: radial-gradient(220% 160% at 0% 0%, #1b2144 0%, #070a16 40%, #050814 100%);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.page-home .hero::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 102, 178, 0.14) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(0, 188, 255, 0.18) 0, transparent 60%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.page-home .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, rgba(0, 0, 0, 0.45), transparent 55%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.page-home .hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Columna izquierda */
+
+.page-home .hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.6rem;
+}
+
+.hero-kicker {
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff6fb8;
+  margin-bottom: 0.35rem;
+}
+
+.page-home .hero-content h1 {
+  font-size: clamp(2.4rem, 3vw + 1.4rem, 3.4rem);
+  line-height: 1.05;
+  font-weight: 800;
+  margin: 0;
+}
+
+.page-home .hero-content p,
+.hero-lead {
+  max-width: 34rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(219, 227, 255, 0.9);
+  margin: 0;
+}
+
+/* Botones principales */
+
+.hero-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.8rem;
+}
+
+.hero-actions .btn.primary {
+  padding-inline: 1.8rem;
+  height: 3.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563ff, #5f9bff);
+  box-shadow: 0 14px 30px rgba(37, 99, 255, 0.45);
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  color: #050b18;
+}
+
+.hero-actions .btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 40px rgba(37, 99, 255, 0.6);
+  filter: brightness(1.06);
+}
+
+.hero-actions .btn.secondary {
+  padding-inline: 1.7rem;
+  height: 3.1rem;
+  border-radius: 999px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(7, 10, 22, 0.8);
+  backdrop-filter: blur(16px);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.hero-actions .btn.secondary:hover {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
+}
+
+/* Mini-cards debajo de los botones */
+
+.hero-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.hero-highlight-card {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: radial-gradient(circle at top left, #141b33, #090f1f);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 26px rgba(3, 10, 30, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 111, 184, 0.7);
+}
+
+.hero-highlight-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top left, #ff6fb8, #ff9b4b);
+  color: #050814;
+  font-size: 1rem;
+}
+
+.hero-highlight-text h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.15rem;
+}
+
+.hero-highlight-text p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #9aa5c5;
+}
+
+/* Columna derecha: card AHORA EN VIVO */
+
+.page-home .hero-side {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.hero-live-highlight {
+  border-radius: 32px;
+  padding: 1px;
+  background: linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff);
+  max-width: 520px;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-live-inner {
+  background: #050b18;
+  border-radius: inherit;
+  padding: 2.2rem 2.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+}
+
+/* Badge “Ahora en NZK TV” */
+.hero-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff7ab8;
+}
+
+.hero-live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #ff4a4a;
+  box-shadow: 0 0 10px rgba(255, 74, 74, 0.9);
+}
+
+/* Thumb del programa */
+.hero-live-thumb {
+  margin: 0.75rem 0 1.1rem;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.hero-live-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Textos card */
+.hero-live-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.hero-live-time {
+  font-size: 0.95rem;
+  color: #c4c8de;
+}
+
+.hero-live-category {
+  font-size: 0.9rem;
+  color: #9ca1c5;
+}
+
+.hero-live-desc {
+  font-size: 0.95rem;
+  color: #d5d9f5;
+  margin-top: 0.5rem;
+}
+
+/* Botón Mirar en vivo */
+.hero-live-button {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#050b18, #050b18) padding-box,
+    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
+}
+
+.hero-live-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Versión del panel en el home reutilizando estilos del EN VIVO */
+.live-meta-panel-home {
+  max-width: 460px;
+  margin-left: auto;
+}
+
+/* Responsive hero */
+
+@media (max-width: 900px) {
+  .page-home .hero {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.4rem;
+    margin: 1.25rem 0 2.5rem;
+  }
+
+  .page-home .hero-side {
+    margin-top: 1.4rem;
+    justify-content: stretch;
+  }
+
+  .hero-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-live-highlight {
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   SECCIONES: CAROUSEL Y LISTAS
+============================================ */
+.section-carousel,
+.section-list {
+  margin: 2rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+}
+
+.section-header a {
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   TARJETAS (OTT STYLE) + SLIDER SNAP
+============================================ */
+.cards-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(210px, 290px);
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cards-row > .card {
+  scroll-snap-align: start;
+}
+
+.card {
+  position: relative;
+  background: #0b1020;
+  border-radius: 0.9rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+/* Elevación + borde degradado al hover */
+.card:hover {
+  border: 1.7px solid transparent;
+  background:
+    linear-gradient(#0b1020, #0b1020) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
+  transform: translateY(-4px);
+}
+
+.video-date {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin: 4px 0 6px;
+}
+
+/* CTA flotante opcional */
+.card-quick-cta {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(5, 11, 24, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+/* Thumbs genéricas */
+.thumb-placeholder {
+  background: linear-gradient(135deg, #1f2744, #12182a);
+  border-radius: 0.75rem;
+  height: 140px;
+}
+.thumb-placeholder.large {
+  height: 220px;
+}
+
+.news-card {
+  flex-direction: row;
+  gap: 0.75rem;
+}
+
+.news-card .thumb-placeholder {
+  flex: 0 0 120px;
+  height: 80px;
+}
+
+.cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================
+   BOTONES
+============================================ */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.btn.primary {
+  background: #4f8cff;
+  color: #050b18;
+}
+
+.btn.secondary {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn.small {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   FOOTER TIPO TVPERÚ
+============================================ */
+.site-footer {
+  margin-top: 3rem;
+  background: #121319;
+  color: #f5f5f5;
+  font-size: 0.85rem;
+  padding-bottom: 4.5rem; /* espacio por bottom-nav */
+}
+
+/* Franja superior de color */
+.footer-top-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #ff4a4a, #f2b35b, #4f8cff);
+}
+
+/* Bloque principal de columnas */
+.footer-main {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-column h4 {
+  margin: 0 0 0.9rem;
+  font-size: 0.95rem;
+}
+
+.footer-column p {
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Contacto */
+.footer-contact-item {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.footer-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.footer-icon-circle i {
+  font-size: 0.95rem;
+  color: #f2b35b;
+}
+
+/* Links */
+.footer-column-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column-links li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-column-links a {
+  opacity: 0.8;
+  transition: opacity 0.18s ease, color 0.18s ease;
+}
+
+.footer-column-links a:hover {
+  opacity: 1;
+  color: #4f8cff;
+}
+
+/* Redes y stores */
+.footer-column-social .footer-subtitle {
+  margin-top: 1.4rem;
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-social-icons a {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+}
+
+.footer-social-icons a:hover {
+  background: #4f8cff;
+  color: #050b18;
+  transform: translateY(-2px);
+}
+
+/* Badges App Store / Play Store */
+.footer-stores {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.footer-store-img img {
+  height: 42px;
+  display: block;
+  border-radius: 0.55rem;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.footer-store-img:hover img {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+@media (max-width: 480px) {
+  .footer-store-img img {
+    height: 38px;
+  }
+}
+
+/* Logos / aliados (por si luego los usas) */
+.footer-partners {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0.9rem 1rem 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Franja inferior copyright */
+.footer-bottom {
+  text-align: center;
+  padding: 0.9rem 1rem 1.5rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive footer */
+@media (max-width: 900px) {
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 2rem;
+  }
+
+  .footer-column-contact {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-partners {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ============================================
+   BOTTOM NAV — Mobile / Tablet APP Style
+============================================ */
+
+/* NAV tipo píldora */
+.neo-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 600px;
+  background: #0d111c;
+  padding: 10px 18px;
+  border-radius: 999px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+}
+
+/* Cada ítem */
+.neo-nav .nav-item {
+  flex: 1;
+  text-align: center;
+  color: #aab0c0;
+  font-size: 12px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border-radius: 999px;
+  transition: 0.25s ease;
+}
+
+/* Ícono */
+.neo-nav .nav-item i {
+  font-size: 18px;
+  opacity: 0.8;
+  transition: 0.25s ease;
+}
+
+/* Activo */
+.neo-nav .nav-item.active {
+  background: linear-gradient(45deg, #ff007f, #7a5cff, #00e6ff);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
+}
+
+.neo-nav .nav-item.active i {
+  opacity: 1;
+  color: #fff;
+}
+
+/* Hover (solo tablets y desktop) */
+@media (hover: hover) {
+  .neo-nav .nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+  }
+}
+
+/* Bottom-nav solo hasta 1024px (tablet incluido) */
+@media (min-width: 1025px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Ocultar nav superior en mobile/tablet */
+@media (max-width: 1024px) {
+  .main-nav {
+    display: none !important;
+  }
+
+  .nav-toggle {
+    display: none !important;
+  }
+
+  .header-inner {
+    justify-content: space-between;
+  }
+}
+
+/* Ajuste botón portal en móviles */
+@media (max-width: 768px) {
+  .header-inner {
+    gap: 0.5rem;
+  }
+
+  .logo.logo-img {
+    margin-right: auto;
+    flex: 0 0 auto;
+  }
+
+  .header-actions {
+    margin-left: auto;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .header-actions .action-gradient-btn {
+    font-size: 0.9rem;
+    padding: 0.45rem 1rem;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================
+   EN VIVO: PLAYER + PANEL LATERAL
+============================================ */
+
+/* Player + panel: el player es mucho más grande */
+.page-live-ott .live-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 3.2fr) minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+/* Layout tablet */
+@media (max-width: 1024px) {
+  .page-live-ott .live-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .live-meta-panel {
+    margin-top: 1.2rem;
+  }
+}
+
+/* VIDEO */
+.live-player-frame {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #000;
+}
+.live-player-frame video {
+  width: 100%;
+  display: block;
+  max-height: 72vh;
+  object-fit: cover;
+}
+
+/* BOTÓN DE CALIDAD */
+.quality-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  backdrop-filter: blur(4px);
+}
+.quality-toggle-btn::before {
+  content: "⚙";
+  font-size: 0.8rem;
+}
+.quality-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+/* PANEL LATERAL EN VIVO */
+.live-meta-panel {
+  background: #0b1020;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+  column-gap: 1.5rem;
+  row-gap: 0.6rem;
+  align-items: center;
+}
+
+.live-meta-poster {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #111016;
+  align-self: stretch;
+  min-height: 160px;
+}
+
+.live-meta-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Textos EN VIVO */
+.live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #ff4a4a;
+}
+
+.live-tag::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #ff4a4a;
+  border-radius: 999px;
+  box-shadow: 0 0 6px rgba(255, 74, 74, 0.9);
+}
+
+.live-title {
+  font-size: 1.4rem;
+  margin: 0.3rem 0;
+}
+
+.live-time {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.live-desc {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0.75rem 0 1rem;
+}
+
+/* Botón EN VIVO */
+.btn-live-cta {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  color: #f5f7ff;
+  text-align: center;
+  background:
+    linear-gradient(#050b18, #050b18) padding-box,
+    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
+}
+
+.btn-live-cta i {
+  font-size: 0.95rem;
+}
+
+.btn-live-cta:hover {
+  background:
+    linear-gradient(#07101f, #07101f) padding-box,
+    linear-gradient(90deg, #ff6a6a, #ffb35c, #6f9cff, #b07bff) border-box;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Desktop: borde degradado más marcado */
+@media (min-width: 1025px) {
+  .live-meta-panel .btn-live-cta {
+    background:
+      linear-gradient(#050b18, #050b18) padding-box,
+      linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box !important;
+    border: 1.4px solid transparent !important;
+    color: #ffffff;
+  }
+
+  .live-meta-panel .btn-live-cta:hover {
+    background:
+      linear-gradient(#080f25, #080f25) padding-box,
+      linear-gradient(90deg, #ff6a6a, #ffb35c, #6f9cff, #b07bff) border-box !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+/* ============================================
+   STRIP DE PROGRAMACIÓN (4 CARDS)
+============================================ */
+
+.live-strip {
+  margin-top: 1.75rem;
+}
+
+/* Desktop: 4 cards en una sola fila */
+.live-strip-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+/* Card base como banner */
+.live-card {
+  position: relative;
+  background: #0b1020;
+  border-radius: 1.25rem;
+  padding: 0.75rem 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+/* Hover con borde degradado */
+.live-card:hover {
+  border: 1.7px solid transparent;
+  background:
+    linear-gradient(#0b1020, #0b1020) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
+  transform: translateY(-4px);
+}
+
+/* Imagen grande del programa */
+.live-card-thumb {
+  border-radius: 0.95rem;
+  overflow: hidden;
+  height: 190px;
+  background: linear-gradient(135deg, #1f2744, #12182a);
+}
+
+.live-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Contenido textual debajo de la imagen */
+.live-card-body {
+  padding-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* Título / hora / categoría */
+.live-card-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.live-card-time {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin: 0.05rem 0 0.15rem;
+}
+
+.live-card-category {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4f8cff;
+  margin: 0;
+}
+
+/* Labels tipo pill sobre la imagen */
+.live-label {
+  position: absolute;
+  top: 0.9rem;
+  left: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.live-label-now {
+  background: #ff4a4a;
+  color: #050b18;
+}
+
+.live-label-next,
+.live-label-later {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111016;
+}
+
+.live-label-soon {
+  background: #f2b35b;
+  color: #111016;
+}
+
+/* ============================================
+   RESPONSIVE GENERAL
+============================================ */
+
+@media (max-width: 900px) {
+  .cards-row {
+    grid-auto-columns: minmax(170px, 260px);
+  }
+
+  .live-strip-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .live-card-thumb {
+    height: 160px;
+  }
+}
+
+/* SOLO MÓVIL (teléfonos) <= 700px */
+@media (max-width: 700px) {
+  .page-live-ott .live-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .live-meta-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .live-meta-poster {
+    width: 100%;
+    height: 180px;
+    min-height: auto;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .live-meta-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .live-title {
+    font-size: 1.3rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .live-time {
+    font-size: 0.9rem;
+  }
+
+  .live-desc {
+    font-size: 0.9rem;
+    line-height: 1.35rem;
+  }
+
+  .btn-live-cta {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+    gap: 0.35rem;
+  }
+}
+
+/* MÓVIL muy pequeño (<= 430px) */
+@media (max-width: 430px) {
+  .live-meta-panel {
+    padding: 0.9rem;
+    gap: 0.75rem;
+  }
+
+  .live-meta-poster {
+    height: 160px;
+  }
+
+  .live-title {
+    font-size: 1.15rem;
+  }
+
+  .btn-live-cta {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Desktop: card EN VIVO vertical */
+@media (min-width: 1025px) {
+  .live-meta-panel {
+    display: block !important;
+    padding: 1.3rem;
+  }
+
+  .live-meta-poster {
+    width: 100%;
+    height: 190px;
+    margin: 0.9rem 0 1rem;
+    border-radius: 0.95rem;
+    overflow: hidden;
+    background: #111016;
+  }
+
+  .live-meta-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .live-meta-panel .btn-live-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===============================
+   ESTILOS PRO - PÁGINA PROGRAMACIÓN
+   =============================== */
+
+.page-programacion {
+  background: #0a0f1f;
+  padding-bottom: 60px;
+}
+
+/* ENCABEZADO */
+.schedule-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.schedule-header p {
+  color: #b8c1d1;
+  margin-top: 0;
+}
+
+/* NAV DE DÍAS */
+
+.schedule-tabs-wrapper {
+  margin: 1.5rem 0 1rem;
+  padding: 2px;
+  border-radius: 999px;
+  background: linear-gradient(45deg, #ff007f, #7a5cff, #00e6ff);
+}
+
+.schedule-tabs {
+  display: flex;
+  overflow-x: auto;
+  border-radius: 999px;
+  background: #020617;
+  scrollbar-width: thin;
+}
+
+.schedule-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+.schedule-tabs::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.6);
+  border-radius: 999px;
+}
+
+/* Botones de día */
+
+.schedule-tab {
+  flex: 1 0 auto;
+  min-width: 140px;
+  padding: 16px 24px;
+  background: #020617;
+  border: none;
+  border-right: 1px solid rgba(15, 23, 42, 0.9);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.12s ease;
+}
+
+.schedule-tab:last-child {
+  border-right: none;
+}
+
+.schedule-tab:hover {
+  background: #050816;
+  transform: translateY(-1px);
+}
+
+/* Texto día */
+
+.schedule-tab-weekday {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.schedule-tab-weekday::after {
+  content: ",";
+}
+
+/* Fecha */
+
+.schedule-tab-date {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+/* Activo */
+
+.schedule-tab.is-active {
+  background: #e9eef7;
+  border-radius: 24px;
+}
+
+.schedule-tab.is-active .schedule-tab-weekday,
+.schedule-tab.is-active .schedule-tab-date {
+  color: #ff3b81;
+}
+
+/* Responsive tabs */
+
+@media (max-width: 768px) {
+  .schedule-tab {
+    min-width: 120px;
+    padding: 12px 16px;
+  }
+
+  .schedule-tab-weekday {
+    font-size: 16px;
+  }
+
+  .schedule-tab-date {
+    font-size: 12px;
+  }
+}
+
+/* LISTA DE PROGRAMACIÓN */
+
+.schedule-day-header h2 {
+  margin: 25px 0 15px 0;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ITEM */
+
+.schedule-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+  background: #121a31;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: 0.2s;
+  scroll-margin-top: 70px;
+}
+
+.schedule-item:hover {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* HORA */
+
+.schedule-time {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 8px;
+}
+
+/* COLUMNA PROGRAMA */
+
+.schedule-program {
+  display: flex;
+  gap: 18px;
+}
+
+/* MINIATURA */
+
+.schedule-program-thumb img {
+  width: 220px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #000;
+}
+
+@media (max-width: 768px) {
+  .schedule-item {
+    scroll-margin-top: 70px;
+  }
+}
+
+/* INFO */
+
+.schedule-program-info {
+  flex: 1;
+}
+
+.schedule-program-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.schedule-program-meta {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c7d3e6;
+  margin-bottom: 10px;
+}
+
+.schedule-program-desc {
+  color: #aeb9cd;
+  font-size: 15px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+/* LINK VER EN VIVO (bloque actual) */
+
+.schedule-live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  padding: 8px 16px;
+  background: #bd0000;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.schedule-live-link:hover {
+  background: #a30000;
+}
+
+/* BLOQUE ACTUAL “ON AIR” */
+
+.schedule-item.is-current-block {
+  border: 2px solid #e63946 !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+
+.schedule-item.is-current-block .schedule-time {
+  color: #ff4d4d;
+}
+
+/* Texto para bloques no actuales */
+
+.schedule-live-text {
+  font-size: 14px;
+  color: #8f9ab5;
+  margin: 0;
+}
+
+/* Responsive lista */
+
+@media (max-width: 768px) {
+  .schedule-item {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-time {
+    font-size: 18px;
+  }
+
+  .schedule-program {
+    flex-direction: column;
+  }
+
+  .schedule-program-thumb img {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+/* ========= SPLASH NZK tvGO ========= */
+
+.app-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at top, #182544 0%, #050915 55%, #02030a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.app-splash.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.app-splash-inner {
+  text-align: center;
+  padding: 2.5rem 3rem;
+  border-radius: 32px;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 55%);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.9);
+}
+
+.app-splash-logo {
+  width: 210px;
+  max-width: 70vw;
+  display: block;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 14px 35px rgba(0, 0, 0, 0.9));
+}
+
+.app-splash-text {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f3f4ff;
+  opacity: 0.8;
+}
+
+/* Spinner */
+.app-splash-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: #ff4b8a;
+  border-right-color: #3cd4ff;
+  margin: 0 auto;
+  animation: splash-spin 0.8s linear infinite;
+}
+
+@keyframes splash-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-splash-inner {
+    padding: 1.8rem 2rem;
+    border-radius: 24px;
+  }
+
+  .app-splash-logo {
+    width: 170px;
+  }
+}
+
+/* =============================== */
+/*  SECCIÓN — NZK PRODUCTORA       */
+/* =============================== */
+
+.producer-hero {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: minmax(0,1.3fr) minmax(0,1fr);
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.producer-kicker {
+  color: #ff82a3;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.producer-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.8rem;
+}
+
+.producer-lead {
+  font-size: 1.2rem;
+  color: #d7d9e3;
+  line-height: 1.5;
+  max-width: 560px;
+}
+
+.producer-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.4rem 0 1.8rem;
+}
+
+.producer-highlight {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  color: #f4f6ff;
+}
+
+.producer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: 1rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#050b18, #050b18) padding-box,
+    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* --- CARD DERECHA --- */
+
+.producer-card {
+  background: rgba(0, 0, 0, 0.27);
+  backdrop-filter: blur(28px);
+  border-radius: 1.5rem;
+  padding: 1.8rem;
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.producer-card-img img {
+  width: 100%;
+  border-radius: 1rem;
+  height: 180px;
+  object-fit: cover;
+}
+
+.producer-card-content .producer-tag {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .85rem;
+  color: #ff7f7f;
+}
+
+.tag-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff4757;
+  border-radius: 50%;
+}
+
+.producer-card-content h3 {
+  font-size: 1.5rem;
+  margin: .4rem 0 .6rem;
+  color: #fff;
+}
+
+.producer-card-content p {
+  color: #d2d4de;
+  margin-bottom: 1.4rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .producer-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   Ajustes página de video (video.php)
+   ========================== */
+
+.page-video .vod-player-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #000;
+  /* relación 16:9 (como el en vivo) */
+  padding-top: 56.25%;
+}
+
+/* Hacemos que el contenido (iframe o fb-video) llene todo el frame */
+.page-video .vod-player-frame .vod-embed-wrapper,
+.page-video .vod-player-frame iframe,
+.page-video .vod-player-frame .fb-video > span,
+.page-video .vod-player-frame .fb-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Títulos MUY largos dentro del card derecho */
+.page-video .live-meta-panel .live-title {
+  font-size: clamp(1.4rem, 1vw + 1.2rem, 2.1rem);
+  line-height: 1.15;
+  word-break: break-word; /* evita que se salga del card */
+}
+
+/* Limitamos un poco la descripción para que no rompa el diseño */
+.page-video .live-meta-panel .live-desc {
+  max-height: 7rem;
+  overflow: hidden;
+}
+
+/* Fecha del VOD más discreta */
+.page-video .live-meta-panel .live-date {
+  margin: 0.6rem 0 0.8rem;
+  font-size: 0.95rem;
+  color: rgba(226, 232, 240, 0.8);
+}

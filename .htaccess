@@ -1,0 +1,15 @@
+# Activar motor de reescritura
+RewriteEngine On
+
+# Evitar problemas si el servidor tiene MultiViews
+Options -MultiViews
+
+# Si la ruta pedida NO es un archivo real...
+RewriteCond %{REQUEST_FILENAME} !-f
+# ...y NO es una carpeta real
+RewriteCond %{REQUEST_FILENAME} !-d
+# Pero SÍ existe un archivo .php con ese nombre
+RewriteCond %{REQUEST_FILENAME}.php -f
+
+# Entonces: /en-vivo  -> /en-vivo.php
+RewriteRule ^(.+?)/?$ $1.php [L]
