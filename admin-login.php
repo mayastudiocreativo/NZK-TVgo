@@ -3,7 +3,7 @@ session_start();
 require __DIR__ . '/includes/db.php';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: admin-videos.php');
+    header('Location: admin-panel.php');
     exit;
 }
 
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id']   = (int)$user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_role'] = $user['role']; // 'admin' o 'editor'
-            header('Location: admin-videos.php');
+            header('Location: admin-panel.php');
             exit;
         } else {
             $error = 'Usuario o contraseña incorrectos.';

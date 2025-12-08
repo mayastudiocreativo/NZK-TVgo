@@ -607,3 +607,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // ... AQUÍ DEJAS TODO LO QUE YA TENÍAS:
   // toggle menú, initLivePlayer, updateCarousel, initSchedulePage, etc.
 });
+
+function initProgramasCarousel() {
+  const section = document.querySelector(".section-carousel-programas");
+  if (!section) return;
+
+  const track = section.querySelector("[data-carousel-track='programas']");
+  const prevBtn = section.querySelector(".carousel-arrow--prev");
+  const nextBtn = section.querySelector(".carousel-arrow--next");
+
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const getStep = () => {
+    const card = track.querySelector(".video-card--programa");
+    if (!card) return 300;
+    const cardStyles = window.getComputedStyle(card);
+    const gap = parseFloat(window.getComputedStyle(track).columnGap || cardStyles.marginRight || 16);
+    return card.getBoundingClientRect().width + gap;
+  };
+
+  prevBtn.addEventListener("click", () => {
+    const step = getStep();
+    track.scrollBy({ left: -step, behavior: "smooth" });
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const step = getStep();
+    track.scrollBy({ left: step, behavior: "smooth" });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ... aquí ya tendrás otras inicializaciones tuyas ...
+  initProgramasCarousel();
+});

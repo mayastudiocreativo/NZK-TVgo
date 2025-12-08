@@ -1848,3 +1848,339 @@ img {
   font-size: 0.95rem;
   color: rgba(226, 232, 240, 0.8);
 }
+
+/* estilos cards de programas de nzk */
+/* Fila tipo Netflix solo para Programas de NZK */
+.cards-row-programas {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+}
+
+/* Quitar scrollbars feos */
+.cards-row-programas::-webkit-scrollbar {
+  display: none;
+}
+.cards-row-programas {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Cada card de programa */
+.video-card--programa {
+  flex: 0 0 260px; /* ancho de la card */
+  scroll-snap-align: start;
+}
+
+/* Link ocupa todo el card */
+.card-link--full {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Botón Ver programa */
+.section-carousel-programas .card-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #0b1120;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* En móvil, cards un poco más anchas */
+@media (max-width: 768px) {
+  .video-card--programa {
+    flex: 0 0 80%;
+  }
+}
+
+/* BOTÓN DENTRO DEL CARD — Programas de NZK */
+.card-cta-programa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #4f8cff, #2563eb);
+    color: #f9fafb;
+    margin-top: 0.8rem;
+    width: fit-content;
+    transition: all 0.18s ease;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+}
+
+/* Hover */
+.card-link:hover .card-cta-programa {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.55);
+}
+
+/* Activo (click) */
+.card-link:active .card-cta-programa {
+    transform: translateY(0);
+    box-shadow: 0 3px 12px rgba(37, 99, 235, 0.35);
+}
+.page-hero-programa {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.page-hero-programa-media {
+  max-width: 520px;
+}
+
+.program-hero-image {
+  width: 100%;
+  border-radius: 1rem;
+  display: block;
+  box-shadow: 0 24px 60px rgba(15,23,42,0.9);
+}
+
+.page-hero-programa-info h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.6rem;
+}
+
+.program-hero-description {
+  margin: 0 0 0.75rem;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.program-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* grid de episodios */
+/* ===== HERO DEL PROGRAMA (tipo cabecera Netflix) ===== */
+.page-hero-programa {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 3fr);
+  gap: 1.8rem;
+  margin-bottom: 2.2rem;
+  align-items: center;
+}
+
+.page-hero-programa-media {
+  max-width: 520px;
+}
+
+.program-hero-image {
+  width: 100%;
+  border-radius: 1.2rem;
+  display: block;
+  box-shadow: 0 26px 60px rgba(15,23,42,0.95);
+}
+
+.page-hero-programa-info h1 {
+  margin: 0 0 0.6rem;
+  font-size: 1.7rem;
+}
+
+.program-hero-description {
+  margin: 0 0 0.7rem;
+  color: #e5e7eb;
+  font-size: 0.96rem;
+  max-width: 520px;
+}
+
+.program-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Responsive hero */
+@media (max-width: 900px) {
+  .page-hero-programa {
+    grid-template-columns: 1fr;
+  }
+  .page-hero-programa-media {
+    max-width: 100%;
+  }
+}
+
+/* ===== EPISODIOS – fila tipo Netflix ===== */
+
+.section-episodes {
+  margin-top: 1rem;
+}
+
+.section-episodes .section-header h2 {
+  font-size: 1.1rem;
+}
+
+/* Fila horizontal scroll (tipo carrusel Netflix) */
+.episodes-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0.8rem 0 0.4rem;
+  scroll-snap-type: x mandatory;
+}
+
+/* Ocultar scrollbar visualmente */
+.episodes-row::-webkit-scrollbar {
+  height: 6px;
+}
+.episodes-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+.episodes-row::-webkit-scrollbar-thumb {
+  background: rgba(148,163,184,0.5);
+  border-radius: 999px;
+}
+.episodes-row {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148,163,184,0.6) transparent;
+}
+
+/* Cada card de episodio */
+.episode-card {
+  flex: 0 0 230px;
+  scroll-snap-align: start;
+}
+
+.episode-link {
+  display: flex;
+  flex-direction: column;
+  background: #020617;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(15,23,42,0.9);
+  box-shadow: 0 14px 35px rgba(15,23,42,0.9);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.episode-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #020617;
+  overflow: hidden;
+}
+
+.episode-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hover: subir un poco el card, más luz */
+.episode-link:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59,130,246,0.8);
+  box-shadow: 0 18px 45px rgba(15,23,42,1);
+}
+
+/* Info del episodio */
+.episode-info {
+  padding: 0.7rem 0.8rem 0.85rem;
+}
+
+.episode-title {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.episode-meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+.episode-description {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #d1d5db;
+  line-height: 1.35;
+}
+
+/* En pantallas pequeñas, cards un poco más grandes */
+@media (max-width: 768px) {
+  .episode-card {
+    flex: 0 0 70%;
+  }
+}
+
+/* ===========================================================
+   CONTENEDOR PRINCIPAL TIPO CARD PREMIUM (DEGRADADO Y SOMBRA)
+   =========================================================== */
+
+.program-hero-wrapper {
+  max-width: 1250px;
+  margin: 0 auto 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.program-hero-card {
+  background: linear-gradient(135deg, rgba(18, 26, 48, 0.85), rgba(4, 8, 18, 0.92));
+  border-radius: 1.8rem;
+  padding: 2rem 2.5rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.55);
+  
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr);
+  gap: 2.2rem;
+  align-items: center;
+}
+
+/* Imagen del programa */
+.program-hero-media img.program-hero-image {
+  width: 100%;
+  border-radius: 1.4rem;
+  box-shadow: 0 22px 55px rgba(0,0,0,0.6);
+}
+
+/* Texto del hero */
+.program-hero-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.program-hero-description {
+  font-size: 1rem;
+  color: #d1d5db;
+  margin-bottom: 0.7rem;
+}
+
+.program-meta {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+  .program-hero-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}

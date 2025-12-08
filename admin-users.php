@@ -174,7 +174,7 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
     <p style="margin:0;font-size:0.85rem;color:#9ca3af;">Solo administrador. Usuario actual: <?= clean($currentUser) ?></p>
   </div>
   <div>
-    <a href="admin-videos.php" class="btn-secondary">Volver a videos</a>
+    <a href="admin-panel.php" class="btn-secondary">Volver al panel</a>
     <a href="admin-logout.php" class="btn-secondary">Cerrar sesión</a>
   </div>
 </header>

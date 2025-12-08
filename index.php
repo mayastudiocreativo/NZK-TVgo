@@ -269,63 +269,67 @@
          SECCIÓN: PROGRAMAS DE NZK
          category = 'programas'
     ========================== -->
-    <?php
-      $stmtProgramas = $pdo->query("
-        SELECT id, title, slug, description, thumbnail, published_at
-        FROM nzk_videos
-        WHERE category = 'programas'
-        ORDER BY published_at DESC
-        LIMIT 6
-      ");
-      $videosProgramas = $stmtProgramas->fetchAll();
-    ?>
+<?php
+  // Programas de NZK (cards del home)
+  $stmtProgramas = $pdo->query("
+    SELECT id, title, slug, description, thumbnail, created_at
+    FROM nzk_programas
+    ORDER BY created_at DESC
+    LIMIT 20
+  ");
+  $programasHome = $stmtProgramas->fetchAll();
+?>
 
-    <section class="section-carousel">
-      <div class="section-header">
-        <h2>Programas de NZK</h2>
-        <a href="/programas.php">Ver todos</a>
-      </div>
-      <div class="cards-row">
-        <?php if (empty($videosProgramas)): ?>
-          <p>Todavía no hay programas cargados.</p>
-        <?php else: ?>
-          <?php foreach ($videosProgramas as $video): ?>
-            <?php
-              $fechaProg = '';
-              if (!empty($video['published_at'])) {
-                $tsProg = strtotime($video['published_at']);
-                if ($tsProg) {
-                  $fechaProg = date('d/m/Y · H:i', $tsProg);
-                }
-              }
-            ?>
-            <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
-                <div class="thumb-placeholder">
-                  <?php if (!empty($video['thumbnail'])): ?>
-                    <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
-                      style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
-                    >
-                  <?php else: ?>
-                    <span>Thumbnail</span>
-                  <?php endif; ?>
-                </div>
+<section class="section-carousel section-carousel-programas">
+  <div class="section-header">
+    <h2>Programas de NZK</h2>
+    <a href="/programas.php">Ver todos</a>
+  </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+  <?php if (empty($programasHome)): ?>
+    <p>Todavía no hay programas cargados.</p>
+  <?php else: ?>
+    <div class="cards-row cards-row-programas">
+      <?php foreach ($programasHome as $prog): ?>
+        <article class="card video-card video-card--programa">
+          <!-- TODO el card completo clickeable -->
+          <a
+            href="./programa.php?slug=<?= urlencode($prog['slug']) ?>"
+            class="card-link card-link--full"
+          >
+            <div class="thumb-placeholder">
+              <?php if (!empty($prog['thumbnail'])): ?>
+                <img
+                  src="<?= htmlspecialchars($prog['thumbnail']) ?>"
+                  alt="<?= htmlspecialchars($prog['title']) ?>"
+                  loading="lazy"
+                  style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
+                >
+              <?php else: ?>
+                <span>Imagen programa</span>
+              <?php endif; ?>
+            </div>
 
-                <?php if ($fechaProg): ?>
-                  <p class="video-date"><?= $fechaProg ?></p>
-                <?php endif; ?>
+            <div class="card-body">
+              <h3 class="video-title">
+                <?= htmlspecialchars($prog['title']) ?>
+              </h3>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
-              </a>
-            </article>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </section>
+              <?php if (!empty($prog['description'])): ?>
+                <p class="video-description">
+                  <?= htmlspecialchars($prog['description']) ?>
+                </p>
+              <?php endif; ?>
+
+              <span class="card-cta card-cta-programa">Ver programa</span>
+            </div>
+          </a>
+        </article>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+</section>
+
 
     <!-- =========================
          SECCIÓN: DOCUMENTALES / ENTREVISTAS

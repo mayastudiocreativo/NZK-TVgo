@@ -37,6 +37,17 @@ $CATEGORY_LABELS = [
 $CATEGORY_KEYS = array_keys($CATEGORY_LABELS);
 
 // =========================
+// LISTA DE PROGRAMAS (para asociar videos)
+// =========================
+$stmtProgList = $pdo->query("
+    SELECT id, title
+    FROM nzk_programas
+    ORDER BY title ASC
+");
+$PROGRAM_LIST = $stmtProgList->fetchAll(PDO::FETCH_ASSOC);
+
+
+// =========================
 // ELIMINAR VIDEO
 // =========================
 if (isset($_GET['delete'])) {
@@ -74,6 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $thumbnail    = trim($_POST['thumbnail'] ?? '');
     $published_at = trim($_POST['published_at'] ?? '');
     $category     = $_POST['category'] ?? 'noticias';
+    $program_id   = isset($_POST['program_id']) && $_POST['program_id'] !== ''
+        ? (int)$_POST['program_id']
+        : null;
+
 
     // Normalizar categoría
     if (!in_array($category, $CATEGORY_KEYS, true)) {
@@ -97,38 +112,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($id > 0) {
         // UPDATE
         $stmt = $pdo->prepare("
-            UPDATE nzk_videos
-            SET title = ?, slug = ?, description = ?, fb_url = ?, thumbnail = ?, 
-                published_at = ?, video_date = ?, category = ?
-            WHERE id = ?
-        ");
-        $stmt->execute([
-            $title,
-            $slug,
-            $description,
-            $fb_url,
-            $thumbnail,
-            $published_at,
-            $video_date,
-            $category,
-            $id
-        ]);
+    UPDATE nzk_videos
+    SET title = ?, slug = ?, description = ?, fb_url = ?, thumbnail = ?, 
+        published_at = ?, video_date = ?, category = ?, program_id = ?
+    WHERE id = ?
+");
+$stmt->execute([
+    $title,
+    $slug,
+    $description,
+    $fb_url,
+    $thumbnail,
+    $published_at,
+    $video_date,
+    $category,
+    $program_id,
+    $id
+]);
+
     } else {
         // INSERT
         $stmt = $pdo->prepare("
-            INSERT INTO nzk_videos (title, slug, description, thumbnail, fb_url, video_date, published_at, category)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $title,
-            $slug,
-            $description,
-            $thumbnail,
-            $fb_url,
-            $video_date,
-            $published_at,
-            $category
-        ]);
+    INSERT INTO nzk_videos (title, slug, description, thumbnail, fb_url, video_date, published_at, category, program_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
+$stmt->execute([
+    $title,
+    $slug,
+    $description,
+    $thumbnail,
+    $fb_url,
+    $video_date,
+    $published_at,
+    $category,
+    $program_id
+]);
+
     }
 
     header('Location: admin-videos.php');
@@ -350,6 +369,7 @@ $videos = $stmt->fetchAll();
                     <?= $currentRole === 'admin' ? 'Administrador' : 'Editor' ?>
                 </span>
             </div>
+            <a href="admin-panel.php" class="btn-secondary">Volver al panel</a>
             <a href="admin-logout.php" class="btn-secondary small">Cerrar sesión</a>
         </div>
     </header>
@@ -404,6 +424,20 @@ $videos = $stmt->fetchAll();
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <label for="program_id">Programa (opcional)</label>
+                    <select id="program_id" name="program_id">
+                        <option value="">Sin programa / General</option>
+                        <?php
+                        $currentProgramId = $editingVideo['program_id'] ?? null;
+                        foreach ($PROGRAM_LIST as $prog):
+                            $pid = (int)$prog['id'];
+                        ?>
+                        <option value="<?= $pid ?>"
+                            <?= $currentProgramId == $pid ? 'selected' : '' ?>>
+                            <?= clean($prog['title']) ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
 
                 <label for="published_at">Fecha de publicación</label>
                 <input type="datetime-local" id="published_at" name="published_at"
