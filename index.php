@@ -10,14 +10,14 @@
 
   <!-- SEO -->
   <title>NZK TV en vivo: programación de tvGoNZK hoy gratis</title>
-  <meta name="description" content="Disfruta la señal en vivo de NZK Televisión desde tvGoNZK. Noticias, entretenimiento, series, películas y más, gratis y en línea las 24 horas.">
+  <meta name="description" content="Disfruta la señal en vivo de NZK Televisión desde tvGoNZK: noticias, entretenimiento, series y películas gratis en línea las 24 horas.">
 
   <!-- Open Graph / Social -->
   <meta property="og:site_name" content="TvGoNZK" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tvgo.nzktv.com/" />
   <meta property="og:title" content="NZK Televisión en vivo: disfruta nuestra programación gratis hoy | NZK TV">
-  <meta property="og:description" content="Disfruta la señal en vivo de NZK Televisión. Noticias, entretenimiento, series, películas y más. TV libre para Nasca, Ica y toda la región. ¡Míralo ahora!">
+  <meta property="og:description" content="Disfruta la programación en vivo de NZK Televisión en tvGoNZK: noticias, entretenimiento, series y películas gratis las 24 horas. TV libre para Nasca, Ica y toda la región. ¡Míralo ahora!">
   <meta property="og:image" content="https://tvgo.nzktv.com/img/IconIOS/icon.png" />
   <meta property="og:image:alt" content="TvGoNZK" />
 
@@ -40,49 +40,6 @@
 
   <!-- HLS.js (por si luego quieres player en home) -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-  <!-- Firebase Cloud Messaging (NZKtvgo) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-messaging.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAqfSjiV_Hz4CHCwc02KNGZog2iIWEXkPI",
-      authDomain: "tvgonzk.firebaseapp.com",
-      projectId: "tvgonzk",
-      storageBucket: "tvgonzk.firebasestorage.app",
-      messagingSenderId: "147196989004",
-      appId: "1:147196989004:web:cf9abd115c51c7ece1aee9",
-      measurementId: "G-HG7PKX9FL6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-
-    // Token de notificaciones (NZKtvgo)
-    getToken(messaging, {
-      vapidKey: "BHL4krypMZ2tn5JkojMSlVZTDurfnhZ5RyJj76Zjnyyxl6SBQppXOECAiG_H3ZGwKx2IGEBLzg5gAFIuY1zfqIc"
-    })
-    .then((currentToken) => {
-      if (currentToken) {
-        console.log("🔑 Token de notificación:", currentToken);
-      } else {
-        console.log("⚠️ No se pudo obtener token.");
-      }
-    })
-    .catch(err => console.error("🚨 Error al obtener token:", err));
-
-    // Notificaciones en primer plano
-    onMessage(messaging, (payload) => {
-      console.log("📩 Notificación en primer plano:", payload);
-
-      // Aquí podrías, si quieres, mostrar un aviso dentro de la web:
-      // - un toast
-      // - actualizar un badge de "nuevas noticias"
-      // Pero NO crear new Notification(...), porque ya lo hace el SW.
-    });
-
-  </script>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQLB82PH72"></script>
@@ -632,7 +589,7 @@
       <div class="hero-side">
         <aside class="live-meta-panel live-meta-panel-home">
           <div class="live-meta-poster">
-            <img src="./img/productora/hero-productora.jpg" alt="NZK Productora Audiovisual">
+            <img src="./img/productora/portada.jpg" alt="NZK Productora Audiovisual">
           </div>
 
           <div class="live-meta-content">

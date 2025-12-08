@@ -46,6 +46,68 @@ if (!isset($currentPage)) {
       </a>
     </nav>
 
+    </nav>
+
+<!-- Firebase Cloud Messaging centralizado -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+  import {
+    getMessaging,
+    getToken,
+    onMessage,
+    isSupported
+  } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-messaging.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqfSjiV_Hz4CHCwc02KNGZog2iIWEXkPI",
+    authDomain: "tvgonzk.firebaseapp.com",
+    projectId: "tvgonzk",
+    storageBucket: "tvgonzk.firebasestorage.app",
+    messagingSenderId: "147196989004",
+    appId: "1:147196989004:web:cf9abd115c51c7ece1aee9",
+    measurementId: "G-HG7PKX9FL6"
+  };
+
+  (async () => {
+    try {
+      const supported = await isSupported();
+      if (!supported) {
+        console.log("🔕 FCM no soportado en este navegador.");
+        return;
+      }
+
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+
+      // Obtener token de notificaciones (una vez por navegador/dispositivo)
+      const currentToken = await getToken(messaging, {
+        vapidKey: "BHL4krypMZ2tn5JkojMSlVZTDurfnhZ5RyJj76Zjnyyxl6SBQppXOECAiG_H3ZGwKx2IGEBLzg5gAFIuY1zfqIc"
+      });
+
+      if (currentToken) {
+        console.log("🔑 Token de notificación:", currentToken);
+        // Aquí si quieres luego puedes enviarlo a tu backend
+      } else {
+        console.log("⚠️ No se pudo obtener token de FCM.");
+      }
+
+      // Mensajes en primer plano (NO mostramos notificación del sistema aquí
+      // para evitar duplicados con el Service Worker)
+      onMessage(messaging, (payload) => {
+        console.log("📩 FCM en primer plano:", payload);
+
+        // Si quieres más adelante:
+        // - mostrar un toast
+        // - actualizar un contador de "nuevas noticias"
+        // pero NO hacer new Notification(...) aquí.
+      });
+    } catch (err) {
+      console.error("🚨 Error inicializando Firebase Messaging:", err);
+    }
+  })();
+</script>
+
+
     <!-- Botón derecha -->
     <a href="https://nzktv.com/" class="action-gradient-btn" target="_blank" rel="noopener">
       Portal NZK Noticias

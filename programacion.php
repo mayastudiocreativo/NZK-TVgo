@@ -41,48 +41,6 @@
   <!-- HLS.js (por si algún día quieres VOD aquí) -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <!-- Firebase Cloud Messaging (NZKtvgo) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-messaging.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAqfSjiV_Hz4CHCwc02KNGZog2iIWEXkPI",
-      authDomain: "tvgonzk.firebaseapp.com",
-      projectId: "tvgonzk",
-      storageBucket: "tvgonzk.firebasestorage.app",
-      messagingSenderId: "147196989004",
-      appId: "1:147196989004:web:cf9abd115c51c7ece1aee9",
-      measurementId: "G-HG7PKX9FL6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-
-    // Token de notificaciones (NZKtvgo)
-    getToken(messaging, {
-      vapidKey: "BHL4krypMZ2tn5JkojMSlVZTDurfnhZ5RyJj76Zjnyyxl6SBQppXOECAiG_H3ZGwKx2IGEBLzg5gAFIuY1zfqIc"
-    })
-      .then((currentToken) => {
-        if (currentToken) {
-          console.log("🔑 Token de notificación:", currentToken);
-        } else {
-          console.log("⚠️ No se pudo obtener token.");
-        }
-      })
-      .catch(err => console.error("🚨 Error al obtener token:", err));
-
-    // Notificaciones en primer plano
-    onMessage(messaging, (payload) => {
-  console.log("📩 Notificación en primer plano:", payload);
-
-  // Aquí podrías, si quieres, mostrar un aviso dentro de la web:
-  // - un toast
-  // - actualizar un badge de "nuevas noticias"
-  // Pero NO crear new Notification(...), porque ya lo hace el SW.
-});
-
-  </script>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQLB82PH72"></script>

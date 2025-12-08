@@ -147,11 +147,16 @@ messaging.onBackgroundMessage((payload) => {
 
   const options = {
     body,
-    // 👇 Forzamos SIEMPRE nuestro icono local
+    // 🔹 Forzamos SIEMPRE el icono de la PWA
     icon: "/img/icon-192.png",
     badge: "/img/icon-192.png",
     image: image || undefined,
   };
 
   self.registration.showNotification(title, options);
+
+  const CACHE_NAME = "nzk-tvgo-v1.3"; // antes v1.2
+
 });
+
+
