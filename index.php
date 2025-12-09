@@ -189,7 +189,6 @@
               Disfruta nuestra selección de contenidos en la pantalla de NZK Televisión.
             </p>
 
-            <!-- Corregido: en-vivo.php -->
             <a href="./en-vivo.php" class="btn btn-live-cta hero-live-button">
               <i class="fa-solid fa-play"></i>
               <span>Mirar en vivo</span>
@@ -211,13 +210,13 @@
         ORDER BY published_at DESC
         LIMIT 6
       ");
-      $videosNoticias = $stmtNoticias->fetchAll();
+      $videosNoticias = $stmtNoticias->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel">
       <div class="section-header">
         <h2>Últimas noticias en video</h2>
-        <a href="./videos.php">Ver todas</a>
+        <a href="./noticias.php">Ver todas</a>
       </div>
 
       <div class="cards-row">
@@ -233,15 +232,20 @@
                   $fecha = date('d/m/Y · H:i', $ts);
                 }
               }
+              $videoUrl = './video.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link" style="display:block;">
+              <a
+                href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>"
+                class="card-link"
+                style="display:block;"
+              >
 
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
                   <?php else: ?>
@@ -249,13 +253,13 @@
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fecha): ?>
-                  <p class="video-date"><?= $fecha ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fecha, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
+                <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
               </a>
             </article>
           <?php endforeach; ?>
@@ -268,20 +272,20 @@
          category = 'programas'
     ========================== -->
     <?php
-      // Programas de NZK (cards del home)
       $stmtProgramas = $pdo->query("
         SELECT id, title, slug, description, thumbnail, created_at
         FROM nzk_programas
         ORDER BY created_at DESC
         LIMIT 20
       ");
-      $programasHome = $stmtProgramas->fetchAll();
+      $programasHome = $stmtProgramas->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel section-carousel-programas">
       <div class="section-header">
         <h2>Programas de NZK</h2>
-        <a href="./programas.php">Ver todos</a>
+        <!-- Este enlace apuntaría a un listado general de programas si lo creas -->
+        <!-- <a href="./programas.php">Ver todos</a> -->
       </div>
 
       <?php if (empty($programasHome)): ?>
@@ -289,17 +293,20 @@
       <?php else: ?>
         <div class="cards-row cards-row-programas">
           <?php foreach ($programasHome as $prog): ?>
+            <?php
+              $programUrl = './programa.php?slug=' . urlencode($prog['slug']);
+            ?>
             <article class="card video-card video-card--programa">
               <!-- Card completo clickeable hacia la ficha del programa -->
               <a
-                href="./programa.php?slug=<?= urlencode($prog['slug']) ?>"
+                href="<?= htmlspecialchars($programUrl, ENT_QUOTES, 'UTF-8') ?>"
                 class="card-link card-link--full"
               >
                 <div class="thumb-placeholder">
                   <?php if (!empty($prog['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($prog['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($prog['title']) ?>"
+                      src="<?= htmlspecialchars($prog['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($prog['title'], ENT_QUOTES, 'UTF-8') ?>"
                       loading="lazy"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
@@ -310,12 +317,12 @@
 
                 <div class="card-body">
                   <h3 class="video-title">
-                    <?= htmlspecialchars($prog['title']) ?>
+                    <?= htmlspecialchars($prog['title'], ENT_QUOTES, 'UTF-8') ?>
                   </h3>
 
                   <?php if (!empty($prog['description'])): ?>
                     <p class="video-description">
-                      <?= htmlspecialchars($prog['description']) ?>
+                      <?= htmlspecialchars($prog['description'], ENT_QUOTES, 'UTF-8') ?>
                     </p>
                   <?php endif; ?>
 
@@ -340,7 +347,7 @@
         ORDER BY published_at DESC
         LIMIT 6
       ");
-      $videosDocs = $stmtDocs->fetchAll();
+      $videosDocs = $stmtDocs->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel">
@@ -360,14 +367,15 @@
                   $fechaDoc = date('d/m/Y · H:i', $tsDoc);
                 }
               }
+              $videoUrl = './video.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <a href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>" class="card-link">
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
                   <?php else: ?>
@@ -375,13 +383,13 @@
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fechaDoc): ?>
-                  <p class="video-date"><?= $fechaDoc ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fechaDoc, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
+                <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
               </a>
             </article>
           <?php endforeach; ?>
@@ -401,7 +409,7 @@
         ORDER BY published_at DESC
         LIMIT 6
       ");
-      $videosDep = $stmtDep->fetchAll();
+      $videosDep = $stmtDep->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel">
@@ -421,14 +429,15 @@
                   $fechaDep = date('d/m/Y · H:i', $tsDep);
                 }
               }
+              $videoUrl = './video.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <a href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>" class="card-link">
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
                   <?php else: ?>
@@ -436,13 +445,13 @@
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fechaDep): ?>
-                  <p class="video-date"><?= $fechaDep ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fechaDep, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
+                <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
               </a>
             </article>
           <?php endforeach; ?>
@@ -486,7 +495,7 @@
         ORDER BY published_at DESC
         LIMIT 6
       ");
-      $videosEventos = $stmtEventos->fetchAll();
+      $videosEventos = $stmtEventos->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel">
@@ -507,14 +516,15 @@
                   $fechaEvt = date('d/m/Y · H:i', $tsEvt);
                 }
               }
+              $videoUrl = './video.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <a href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>" class="card-link">
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
                   <?php else: ?>
@@ -522,13 +532,13 @@
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fechaEvt): ?>
-                  <p class="video-date"><?= $fechaEvt ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fechaEvt, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
+                <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
               </a>
             </article>
           <?php endforeach; ?>
@@ -626,7 +636,7 @@
         ORDER BY published_at DESC
         LIMIT 6
       ");
-      $producerVideos = $stmtProd->fetchAll();
+      $producerVideos = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <section class="section-carousel">
@@ -648,16 +658,17 @@
                   $fechaProd = date('d/m/Y · H:i', $ts2);
                 }
               }
+              $videoUrl = './video_productora.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
               <!-- Para la productora usamos el wrapper video_productora.php -->
-              <a href="./video_productora.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <a href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>" class="card-link">
 
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                     >
                   <?php else: ?>
@@ -665,13 +676,13 @@
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fechaProd): ?>
-                  <p class="video-date"><?= $fechaProd ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fechaProd, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
-                <p><?= htmlspecialchars($video['description']) ?></p>
+                <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
               </a>
             </article>
           <?php endforeach; ?>

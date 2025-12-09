@@ -1,10 +1,12 @@
 <?php
 require __DIR__ . '/includes/db.php';
 
-$slug = $_GET['slug'] ?? '';
-if ($slug === '') {
-  // si no hay slug, vuelve al listado de programas
-  header('Location: ./programas.php');
+// Leer y validar slug del programa
+$slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
+
+if ($slug === '' || !preg_match('/^[a-z0-9\-]+$/i', $slug)) {
+  // Si no hay slug válido, volvemos al inicio (o podrías mandar a un listado de programas si lo tienes)
+  header('Location: ./');
   exit;
 }
 
@@ -18,7 +20,7 @@ $stmtProg = $pdo->prepare("
   LIMIT 1
 ");
 $stmtProg->execute([$slug]);
-$programa = $stmtProg->fetch();
+$programa = $stmtProg->fetch(PDO::FETCH_ASSOC);
 
 if (!$programa) {
   http_response_code(404);
@@ -39,9 +41,9 @@ $stmtEp = $pdo->prepare("
   ORDER BY published_at DESC
 ");
 $stmtEp->execute([$slug . '-%']);
-$videosPrograma = $stmtEp->fetchAll();
+$videosPrograma = $stmtEp->fetchAll(PDO::FETCH_ASSOC);
 
-// fecha legible del programa (opcional)
+// Fecha legible del programa (opcional)
 $fechaPrograma = '';
 if (!empty($programa['created_at'])) {
   $ts = strtotime($programa['created_at']);
@@ -54,7 +56,7 @@ if (!empty($programa['created_at'])) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title><?= htmlspecialchars($programa['title']) ?> | NZK tvGO</title>
+  <title><?= htmlspecialchars($programa['title'] ?? 'Programa', ENT_QUOTES, 'UTF-8') ?> | NZK tvGO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="./assets/css/style.css">
@@ -75,8 +77,8 @@ if (!empty($programa['created_at'])) {
         <div class="vod-embed-wrapper">
           <?php if (!empty($programa['thumbnail'])): ?>
             <img
-              src="<?= htmlspecialchars($programa['thumbnail']) ?>"
-              alt="<?= htmlspecialchars($programa['title']) ?>"
+              src="<?= htmlspecialchars($programa['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+              alt="<?= htmlspecialchars($programa['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
               style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
             >
           <?php else: ?>
@@ -96,16 +98,16 @@ if (!empty($programa['created_at'])) {
           </span>
 
           <h1 class="live-title">
-            <?= htmlspecialchars($programa['title']) ?>
+            <?= htmlspecialchars($programa['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>
           </h1>
 
           <?php if ($fechaPrograma): ?>
-            <p class="live-date"><?= $fechaPrograma ?></p>
+            <p class="live-date"><?= htmlspecialchars($fechaPrograma, ENT_QUOTES, 'UTF-8') ?></p>
           <?php endif; ?>
 
           <?php if (!empty($programa['description'])): ?>
             <p class="live-desc">
-              <?= nl2br(htmlspecialchars($programa['description'])) ?>
+              <?= nl2br(htmlspecialchars($programa['description'], ENT_QUOTES, 'UTF-8')) ?>
             </p>
           <?php endif; ?>
 
@@ -142,12 +144,12 @@ if (!empty($programa['created_at'])) {
                        '&program=' . urlencode($programa['slug']);
             ?>
             <article class="episode-card card">
-              <a href="<?= $epUrl ?>" class="episode-link">
+              <a href="<?= htmlspecialchars($epUrl, ENT_QUOTES, 'UTF-8') ?>" class="episode-link">
                 <div class="episode-thumb">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       loading="lazy"
                     >
                   <?php else: ?>
@@ -157,18 +159,18 @@ if (!empty($programa['created_at'])) {
 
                 <div class="episode-info">
                   <h3 class="episode-title">
-                    <?= htmlspecialchars($video['title']) ?>
+                    <?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>
                   </h3>
 
                   <?php if ($fechaEp): ?>
                     <p class="episode-meta">
-                      <?= $fechaEp ?>
+                      <?= htmlspecialchars($fechaEp, ENT_QUOTES, 'UTF-8') ?>
                     </p>
                   <?php endif; ?>
 
                   <?php if (!empty($video['description'])): ?>
                     <p class="episode-description">
-                      <?= htmlspecialchars($video['description']) ?>
+                      <?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?>
                     </p>
                   <?php endif; ?>
                 </div>

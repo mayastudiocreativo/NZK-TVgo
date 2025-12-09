@@ -41,12 +41,11 @@
   <!-- HLS.js (por si algún día quieres VOD aquí) -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQLB82PH72"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-HQLB82PH72');
   </script>
@@ -72,7 +71,7 @@
       </div>
     </section>
 
-    <!-- NAV DE DÍAS (tipo TVPerú) -->
+    <!-- NAV DE DÍAS -->
     <section class="schedule-tabs-wrapper">
       <div id="scheduleTabs" class="schedule-tabs">
         <!-- Los textos (Hoy, fechas, etc.) y el día activo se ajustan en main.js -->

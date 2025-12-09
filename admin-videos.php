@@ -1,14 +1,20 @@
 <?php
 // admin-videos.php
-session_start();
+
+require __DIR__ . '/includes/session.php';
 
 // Si no hay sesión, mandar al login
-if (!isset($_SESSION['user_id'])) {
+if (empty($_SESSION['user_id'])) {
     header('Location: admin-login.php');
     exit;
 }
 
 require __DIR__ . '/includes/db.php';
+require __DIR__ . '/includes/security.php';
+require __DIR__ . '/includes/helpers.php';
+
+// Verificar CSRF en peticiones POST (dentro de security.php ya se comprueba que sea POST)
+csrf_verify();
 
 // =========================
 // Datos de usuario logueado
@@ -46,16 +52,120 @@ $stmtProgList = $pdo->query("
 ");
 $PROGRAM_LIST = $stmtProgList->fetchAll(PDO::FETCH_ASSOC);
 
+// =========================
+// MANEJO DE FORMULARIOS (POST)
+//  - Eliminar video
+//  - Crear / editar video
+// =========================
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-// =========================
-// ELIMINAR VIDEO
-// =========================
-if (isset($_GET['delete'])) {
-    $id = (int) $_GET['delete'];
-    if ($id > 0) {
-        $stmt = $pdo->prepare("DELETE FROM nzk_videos WHERE id = ?");
-        $stmt->execute([$id]);
+    // 1) ELIMINAR VIDEO (POST + CSRF)
+    if (isset($_POST['delete_id'])) {
+        $id = (int)$_POST['delete_id'];
+        if ($id > 0) {
+            $stmt = $pdo->prepare("DELETE FROM nzk_videos WHERE id = ?");
+            $stmt->execute([$id]);
+        }
+        header('Location: admin-videos.php');
+        exit;
     }
+
+    // 2) GUARDAR (CREAR / EDITAR)
+    $id           = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+    $title        = trim($_POST['title'] ?? '');
+    $description  = trim($_POST['description'] ?? '');
+    $fb_url       = trim($_POST['fb_url'] ?? '');
+    $thumbnail    = trim($_POST['thumbnail'] ?? '');
+    $published_at = trim($_POST['published_at'] ?? '');
+    $category     = $_POST['category'] ?? 'noticias';
+    $program_id   = isset($_POST['program_id']) && $_POST['program_id'] !== ''
+        ? (int)$_POST['program_id']
+        : null;
+
+    // Normalizar categoría
+    if (!in_array($category, $CATEGORY_KEYS, true)) {
+        $category = 'noticias';
+    }
+
+    // Validación sencilla
+    if ($title === '' || $fb_url === '') {
+        // Podrías guardar un mensaje de error en sesión si quieres mostrarlo
+        header('Location: admin-videos.php');
+        exit;
+    }
+
+    // Manejo de fecha de publicación
+    if ($published_at === '') {
+        $published_at = date('Y-m-d H:i:s');
+    }
+    $video_date = $published_at;
+
+    // =========================
+    // SLUG ÚNICO
+    // =========================
+    $rawSlug = trim($_POST['slug'] ?? '');
+
+    // Si el usuario no ingresó slug, generarlo desde el título
+    if ($rawSlug === '' && $title !== '') {
+        $rawSlug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $title));
+    }
+
+    // Limpiar bordes de guiones
+    $rawSlug = trim($rawSlug, '-');
+
+    // Si aún queda vacío, usar un slug genérico base
+    if ($rawSlug === '') {
+        $rawSlug = 'video';
+    }
+
+    // Si estás editando, excluye el ID actual al comprobar duplicados
+    $currentId = $id > 0 ? $id : null;
+
+    // Aquí se garantiza que el slug sea único en la tabla nzk_videos
+    $slug = generateUniqueSlug($pdo, 'nzk_videos', $rawSlug, 'id', $currentId);
+
+    // =========================
+    // INSERT / UPDATE
+    // =========================
+    if ($id > 0) {
+        // UPDATE
+        $stmt = $pdo->prepare("
+            UPDATE nzk_videos
+            SET title = ?, slug = ?, description = ?, fb_url = ?, thumbnail = ?, 
+                published_at = ?, video_date = ?, category = ?, program_id = ?
+            WHERE id = ?
+        ");
+        $stmt->execute([
+            $title,
+            $slug,
+            $description,
+            $fb_url,
+            $thumbnail,
+            $published_at,
+            $video_date,
+            $category,
+            $program_id,
+            $id
+        ]);
+    } else {
+        // INSERT
+        $stmt = $pdo->prepare("
+            INSERT INTO nzk_videos (title, slug, description, thumbnail, fb_url, video_date, published_at, category, program_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([
+            $title,
+            $slug,
+            $description,
+            $thumbnail,
+            $fb_url,
+            $video_date,
+            $published_at,
+            $category,
+            $program_id
+        ]);
+    }
+
     header('Location: admin-videos.php');
     exit;
 }
@@ -74,87 +184,6 @@ if (isset($_GET['edit'])) {
 }
 
 // =========================
-// GUARDAR (CREAR / EDITAR)
-// =========================
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id           = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-    $title        = trim($_POST['title'] ?? '');
-    $slug         = trim($_POST['slug'] ?? '');
-    $description  = trim($_POST['description'] ?? '');
-    $fb_url       = trim($_POST['fb_url'] ?? '');
-    $thumbnail    = trim($_POST['thumbnail'] ?? '');
-    $published_at = trim($_POST['published_at'] ?? '');
-    $category     = $_POST['category'] ?? 'noticias';
-    $program_id   = isset($_POST['program_id']) && $_POST['program_id'] !== ''
-        ? (int)$_POST['program_id']
-        : null;
-
-
-    // Normalizar categoría
-    if (!in_array($category, $CATEGORY_KEYS, true)) {
-        $category = 'noticias';
-    }
-
-    // Slug automático si está vacío
-    if ($slug === '' && $title !== '') {
-        $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $title));
-        $slug = trim($slug, '-');
-    }
-
-    // Fecha de publicación
-    if ($published_at === '') {
-        $published_at = date('Y-m-d H:i:s');
-    }
-
-    // Si quieres mantener también video_date, usamos la misma fecha
-    $video_date = $published_at;
-
-    if ($id > 0) {
-        // UPDATE
-        $stmt = $pdo->prepare("
-    UPDATE nzk_videos
-    SET title = ?, slug = ?, description = ?, fb_url = ?, thumbnail = ?, 
-        published_at = ?, video_date = ?, category = ?, program_id = ?
-    WHERE id = ?
-");
-$stmt->execute([
-    $title,
-    $slug,
-    $description,
-    $fb_url,
-    $thumbnail,
-    $published_at,
-    $video_date,
-    $category,
-    $program_id,
-    $id
-]);
-
-    } else {
-        // INSERT
-        $stmt = $pdo->prepare("
-    INSERT INTO nzk_videos (title, slug, description, thumbnail, fb_url, video_date, published_at, category, program_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-");
-$stmt->execute([
-    $title,
-    $slug,
-    $description,
-    $thumbnail,
-    $fb_url,
-    $video_date,
-    $published_at,
-    $category,
-    $program_id
-]);
-
-    }
-
-    header('Location: admin-videos.php');
-    exit;
-}
-
-// =========================
 // LISTADO
 // =========================
 $stmt = $pdo->query("
@@ -163,7 +192,7 @@ $stmt = $pdo->query("
     ORDER BY published_at DESC
     LIMIT 50
 ");
-$videos = $stmt->fetchAll();
+$videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -277,8 +306,12 @@ $videos = $stmt->fetchAll();
             object-fit: cover;
             background: #111827;
         }
-        .actions a {
+        .actions a,
+        .actions form {
             margin-right: 0.5rem;
+            display: inline-block;
+        }
+        .actions a {
             text-decoration: none;
             font-size: 0.8rem;
         }
@@ -383,6 +416,7 @@ $videos = $stmt->fetchAll();
             </h2>
 
             <form method="post" action="admin-videos.php">
+                <?php csrf_field(); ?>
                 <input type="hidden" name="id" value="<?= $editingVideo ? (int)$editingVideo['id'] : 0 ?>">
 
                 <label for="title">Título *</label>
@@ -424,20 +458,21 @@ $videos = $stmt->fetchAll();
                         </option>
                     <?php endforeach; ?>
                 </select>
+
                 <label for="program_id">Programa (opcional)</label>
-                    <select id="program_id" name="program_id">
-                        <option value="">Sin programa / General</option>
-                        <?php
-                        $currentProgramId = $editingVideo['program_id'] ?? null;
-                        foreach ($PROGRAM_LIST as $prog):
-                            $pid = (int)$prog['id'];
-                        ?>
+                <select id="program_id" name="program_id">
+                    <option value="">Sin programa / General</option>
+                    <?php
+                    $currentProgramId = $editingVideo['program_id'] ?? null;
+                    foreach ($PROGRAM_LIST as $prog):
+                        $pid = (int)$prog['id'];
+                    ?>
                         <option value="<?= $pid ?>"
                             <?= $currentProgramId == $pid ? 'selected' : '' ?>>
                             <?= clean($prog['title']) ?>
                         </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <?php endforeach; ?>
+                </select>
 
                 <label for="published_at">Fecha de publicación</label>
                 <input type="datetime-local" id="published_at" name="published_at"
@@ -497,11 +532,14 @@ $videos = $stmt->fetchAll();
                             <td><?= clean($v['published_at']) ?></td>
                             <td class="actions">
                                 <a href="admin-videos.php?edit=<?= (int)$v['id'] ?>" style="color:#38bdf8;">Editar</a>
-                                <a href="admin-videos.php?delete=<?= (int)$v['id'] ?>"
-                                   style="color:#f97373;"
-                                   onclick="return confirm('¿Eliminar este video?');">
-                                   Eliminar
-                                </a>
+
+                                <form method="post" action="admin-videos.php" style="display:inline;"
+                                      onsubmit="return confirm('¿Eliminar este video?');">
+                                    <?php csrf_field(); ?>
+                                    <input type="hidden" name="delete_id" value="<?= (int)$v['id'] ?>">
+                                    <button type="submit" class="btn-danger">Eliminar</button>
+                                </form>
+
                             </td>
                         </tr>
                     <?php endforeach; ?>

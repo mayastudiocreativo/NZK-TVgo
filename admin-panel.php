@@ -1,5 +1,7 @@
 <?php
-session_start();
+require __DIR__ . '/includes/session.php';
+require __DIR__ . '/includes/db.php';
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: admin-login.php');
     exit;
@@ -174,7 +176,7 @@ function clean($v) {
 <header class="cms-topbar">
     <div class="cms-title-block">
         <h1>Panel del CMS – NZK</h1>
-        <span>Elige qué quieres registrar: programas o contenido de video.</span>
+        <span>Elige qué quieres registrar o configurar.</span>
     </div>
 
     <div class="cms-user-box">
@@ -206,6 +208,20 @@ function clean($v) {
         </div>
         <div class="panel-card-footer">
             <a href="admin-videos.php" class="btn-primary">🎬 Gestionar contenido</a>
+        </div>
+    </article>
+
+    <!-- NUEVA OPCIÓN: CARD DE PROMOCIÓN -->
+    <article class="panel-card">
+        <div>
+            <h2>Ingresar card de promoción</h2>
+            <p>
+                Configura la tarjeta <strong>“Muy pronto”</strong> que se muestra en la página En vivo
+                para promocionar una serie, película o novela.
+            </p>
+        </div>
+        <div class="panel-card-footer">
+            <a href="admin-promo.php" class="btn-primary">🌟 Gestionar card de promoción</a>
         </div>
     </article>
 

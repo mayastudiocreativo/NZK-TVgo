@@ -1,6 +1,26 @@
 <?php
   // Página actual para marcar el menú activo
   $currentPage = 'live';
+
+  // Cargamos la BD para leer la promo "Muy pronto"
+  require __DIR__ . '/includes/db.php';
+
+  $promo = null;
+  try {
+      $stmtPromo = $pdo->query("
+        SELECT *
+        FROM nzk_promos_live
+        ORDER BY created_at DESC
+        LIMIT 1
+      ");
+      $promo = $stmtPromo->fetch(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $promo = null;
+  }
+
+  function clean($v) {
+      return htmlspecialchars($v ?? '', ENT_QUOTES, 'UTF-8');
+  }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -45,15 +65,15 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQLB82PH72"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-HQLB82PH72');
   </script>
 </head>
 <body class="page-live">
-    <?php include __DIR__ . '/includes/splash.php'; ?>
-    <?php include __DIR__ . '/includes/header.php'; ?>
-    <?php include __DIR__ . '/includes/bottom-nav.php'; ?>
+  <?php include __DIR__ . '/includes/splash.php'; ?>
+  <?php include __DIR__ . '/includes/header.php'; ?>
+  <?php include __DIR__ . '/includes/bottom-nav.php'; ?>
 
   <main class="page page-live-ott">
 
@@ -76,9 +96,9 @@
         </div>
 
         <!-- Panel lateral (info del programa en vivo) -->
-        <div class="live-meta-panel">
+        <aside class="live-meta-panel">
           <div class="live-meta-poster">
-            <img id="live-main-img" src="./img/placeholder.jpg" alt="">
+            <img id="live-main-img" src="./img/placeholder.jpg" alt="Programa actualmente en vivo">
           </div>
           <div class="live-meta-content">
             <span class="live-tag">AHORA EN VIVO</span>
@@ -93,7 +113,7 @@
               <span>Ver programación completa</span>
             </a>
           </div>
-        </div>
+        </aside>
       </div>
 
       <!-- STRIP DE 4 CARDS: A continuación / Más adelante / Próximamente / Muy pronto -->
@@ -139,18 +159,41 @@
             </div>
           </article>
 
-          <!-- Card 4: Muy pronto -->
+          <!-- Card 4: Muy pronto (desde CMS) -->
           <article class="live-card live-card-soon">
             <div class="live-card-thumb">
-              <img src="./img/novelas/miCaminoEsAmarte.jpg" alt="Próximo programa">
+              <?php if ($promo && !empty($promo['image_url'])): ?>
+                <img src="<?= clean($promo['image_url']) ?>"
+                     alt="<?= clean($promo['title']) ?>">
+              <?php else: ?>
+                <img src="./img/novelas/miCaminoEsAmarte.jpg"
+                     alt="Nuevo programa exclusivo">
+              <?php endif; ?>
             </div>
 
             <div class="live-label live-label-later">Muy pronto</div>
 
             <div class="live-card-body">
-              <h3 class="live-card-title">Nuevo programa exclusivo</h3>
-              <p class="live-card-time">Próximamente</p>
-              <p class="live-card-category">Novedades</p>
+              <h3 class="live-card-title">
+                <?= $promo ? clean($promo['title']) : 'Nuevo programa exclusivo' ?>
+              </h3>
+              <p class="live-card-time">
+                <?= $promo && !empty($promo['time_label']) ? clean($promo['time_label']) : 'Próximamente' ?>
+              </p>
+              <p class="live-card-category">
+                <?= $promo && !empty($promo['category']) ? clean($promo['category']) : 'Novedades' ?>
+              </p>
+
+              <?php if ($promo && !empty($promo['link_url'])): ?>
+                <p style="margin-top:0.4rem;">
+                  <a href="<?= clean($promo['link_url']) ?>"
+                     class="btn btn-live-cta"
+                     style="font-size:0.8rem;padding:0.3rem 0.8rem;">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span>Ver detalle</span>
+                  </a>
+                </p>
+              <?php endif; ?>
             </div>
           </article>
 
@@ -158,11 +201,11 @@
       </section>
     </section>
 
-    <!-- Carrusel de repeticiones / VOD relacionados -->
+    <!-- Carrusel de repeticiones / VOD relacionados (por ahora estático) -->
     <section class="section-carousel">
       <div class="section-header">
         <h2>Repeticiones recientes</h2>
-        <a href="./programas.php">Ver todos los programas</a>
+        <a href="./programa.php">Ver todos los programas</a>
       </div>
       <div class="cards-row">
         <article class="card video-card">
@@ -183,7 +226,7 @@
       </div>
     </section>
 
-    <!-- Eventos especiales -->
+    <!-- Eventos especiales (estático por ahora) -->
     <section class="section-carousel">
       <div class="section-header">
         <h2>Eventos especiales</h2>

@@ -1,0 +1,9 @@
+# Archivos de sistema
+.DS_Store
+__MACOSX/
+
+# Seeds solo para local
+seed-admin.php
+seed-admin.local.php
+
+includes/config.php

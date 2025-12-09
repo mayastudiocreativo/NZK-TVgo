@@ -11,7 +11,7 @@ $stmtProd = $pdo->query("
   WHERE category = 'productora'
   ORDER BY published_at DESC
 ");
-$producerVideos = $stmtProd->fetchAll();
+$producerVideos = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -85,7 +85,10 @@ $producerVideos = $stmtProd->fetchAll();
       <div class="hero-side">
         <aside class="live-meta-panel live-meta-panel-home">
           <div class="live-meta-poster">
-            <img src="./img/productora/portada.jpg" alt="Portafolio NZK Productora Audiovisual">
+            <img
+              src="./img/productora/portada.jpg"
+              alt="Portafolio NZK Productora Audiovisual"
+            >
           </div>
 
           <div class="live-meta-content">
@@ -185,98 +188,98 @@ $producerVideos = $stmtProd->fetchAll();
 
     <!-- SERVICIOS (4 cards, 2x2) -->
     <section class="section-list producer-services">
-  <div class="section-header">
-    <h2>Servicios que ofrecemos</h2>
-  </div>
-
-  <div class="hero-highlights producer-services-grid">
-
-    <!-- 1 -->
-    <article class="hero-highlight-card producer-service-card">
-      <!-- IMAGEN SUPERIOR -->
-      <div class="producer-service-media">
-        <img src="./img/productora/servicios/streaming.jpg" alt="Streaming profesional">
+      <div class="section-header">
+        <h2>Servicios que ofrecemos</h2>
       </div>
 
-      <div class="producer-service-body">
-        <div class="hero-highlight-icon">
-          <i class="fa-solid fa-tower-broadcast"></i>
-        </div>
-        <div class="hero-highlight-text">
-          <h3>Streaming / Live Streaming profesional</h3>
-          <p>
-            Transmisión simultánea en plataformas como YouTube, Facebook, Zoom
-            o landing privada. Ideal para eventos corporativos, conferencias,
-            webinars y conciertos en vivo.
-          </p>
-        </div>
-      </div>
-    </article>
+      <div class="hero-highlights producer-services-grid">
 
-    <!-- 2 -->
-    <article class="hero-highlight-card producer-service-card">
-      <div class="producer-service-media">
-        <img src="./img/productora/servicios/multicamara.jpg" alt="Producción multicámara">
-      </div>
+        <!-- 1 -->
+        <article class="hero-highlight-card producer-service-card">
+          <!-- IMAGEN SUPERIOR -->
+          <div class="producer-service-media">
+            <img src="./img/productora/servicios/streaming.jpg" alt="Streaming profesional">
+          </div>
 
-      <div class="producer-service-body">
-        <div class="hero-highlight-icon">
-          <i class="fa-solid fa-video"></i>
-        </div>
-        <div class="hero-highlight-text">
-          <h3>Producción multicámara y cobertura completa</h3>
-          <p>
-            Desde cámaras en grúa hasta drones, estabilizadores y grabación master.
-            Cubrimos eventos deportivos, conciertos, shows, ceremonias y eventos sociales.
-          </p>
-        </div>
-      </div>
-    </article>
+          <div class="producer-service-body">
+            <div class="hero-highlight-icon">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+            <div class="hero-highlight-text">
+              <h3>Streaming / Live Streaming profesional</h3>
+              <p>
+                Transmisión simultánea en plataformas como YouTube, Facebook, Zoom
+                o landing privada. Ideal para eventos corporativos, conferencias,
+                webinars y conciertos en vivo.
+              </p>
+            </div>
+          </div>
+        </article>
 
-    <!-- 3 -->
-    <article class="hero-highlight-card producer-service-card">
-      <div class="producer-service-media">
-        <img src="./img/productora/servicios/spots.jpg" alt="Spots publicitarios">
-      </div>
+        <!-- 2 -->
+        <article class="hero-highlight-card producer-service-card">
+          <div class="producer-service-media">
+            <img src="./img/productora/servicios/multicamara.jpg" alt="Producción multicámara">
+          </div>
 
-      <div class="producer-service-body">
-        <div class="hero-highlight-icon">
-          <i class="fa-solid fa-bullhorn"></i>
-        </div>
-        <div class="hero-highlight-text">
-          <h3>Spots publicitarios, post-producción y difusión</h3>
-          <p>
-            Producción audiovisual para campañas, anuncios en redes o televisión,
-            con edición, color grading, motion graphics y master final listo
-            para emisión o digital.
-          </p>
-        </div>
-      </div>
-    </article>
+          <div class="producer-service-body">
+            <div class="hero-highlight-icon">
+              <i class="fa-solid fa-video"></i>
+            </div>
+            <div class="hero-highlight-text">
+              <h3>Producción multicámara y cobertura completa</h3>
+              <p>
+                Desde cámaras en grúa hasta drones, estabilizadores y grabación master.
+                Cubrimos eventos deportivos, conciertos, shows, ceremonias y eventos sociales.
+              </p>
+            </div>
+          </div>
+        </article>
 
-    <!-- 4 -->
-    <article class="hero-highlight-card producer-service-card">
-      <div class="producer-service-media">
-        <img src="./img/productora/servicios/drones.jpg" alt="Cobertura con drones">
-      </div>
+        <!-- 3 -->
+        <article class="hero-highlight-card producer-service-card">
+          <div class="producer-service-media">
+            <img src="./img/productora/servicios/spots.jpg" alt="Spots publicitarios">
+          </div>
 
-      <div class="producer-service-body">
-        <div class="hero-highlight-icon">
-          <i class="fa-solid fa-helicopter"></i>
-        </div>
-        <div class="hero-highlight-text">
-          <h3>Cobertura con drones y video aéreo</h3>
-          <p>
-            Grabaciones con drones, ideales para eventos al aire libre,
-            conciertos, ferias e imágenes aéreas impactantes para marcas
-            e instituciones.
-          </p>
-        </div>
-      </div>
-    </article>
+          <div class="producer-service-body">
+            <div class="hero-highlight-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div class="hero-highlight-text">
+              <h3>Spots publicitarios, post-producción y difusión</h3>
+              <p>
+                Producción audiovisual para campañas, anuncios en redes o televisión,
+                con edición, color grading, motion graphics y master final listo
+                para emisión o digital.
+              </p>
+            </div>
+          </div>
+        </article>
 
-  </div>
-</section>
+        <!-- 4 -->
+        <article class="hero-highlight-card producer-service-card">
+          <div class="producer-service-media">
+            <img src="./img/productora/servicios/drones.jpg" alt="Cobertura con drones">
+          </div>
+
+          <div class="producer-service-body">
+            <div class="hero-highlight-icon">
+              <i class="fa-solid fa-helicopter"></i>
+            </div>
+            <div class="hero-highlight-text">
+              <h3>Cobertura con drones y video aéreo</h3>
+              <p>
+                Grabaciones con drones, ideales para eventos al aire libre,
+                conciertos, ferias e imágenes aéreas impactantes para marcas
+                e instituciones.
+              </p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
 
     <!-- GALERÍA TIPO NETFLIX: TODAS LAS PRODUCCIONES -->
@@ -301,14 +304,18 @@ $producerVideos = $stmtProd->fetchAll();
                   $fechaProd = date('d/m/Y · H:i', $ts2);
                 }
               }
+              $videoUrl = './video_productora.php?slug=' . urlencode($video['slug']);
             ?>
             <article class="card video-card">
-              <a href="./video_productora.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <a
+                href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>"
+                class="card-link"
+              >
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
-                      src="<?= htmlspecialchars($video['thumbnail']) ?>"
-                      alt="<?= htmlspecialchars($video['title']) ?>"
+                      src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"
+                      alt="<?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?>"
                       style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
                       loading="lazy"
                     >
@@ -317,14 +324,14 @@ $producerVideos = $stmtProd->fetchAll();
                   <?php endif; ?>
                 </div>
 
-                <h3><?= htmlspecialchars($video['title']) ?></h3>
+                <h3><?= htmlspecialchars($video['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 
                 <?php if ($fechaProd): ?>
-                  <p class="video-date"><?= $fechaProd ?></p>
+                  <p class="video-date"><?= htmlspecialchars($fechaProd, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
 
                 <?php if (!empty($video['description'])): ?>
-                  <p><?= htmlspecialchars($video['description']) ?></p>
+                  <p><?= htmlspecialchars($video['description'], ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
               </a>
             </article>

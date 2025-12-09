@@ -1,5 +1,5 @@
 <?php
-session_start();
+require __DIR__ . '/includes/session.php';
 require __DIR__ . '/includes/db.php';
 
 if (isset($_SESSION['user_id'])) {
@@ -13,18 +13,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['user'] ?? '');
     $password = trim($_POST['pass'] ?? '');
 
-    if ($username !== '' && $password !== '') {
+    // Pequeño límite de longitud para evitar entradas absurdamente grandes
+    if (mb_strlen($username) > 100 || mb_strlen($password) > 1000) {
+        $error = 'Datos de acceso inválidos.';
+    } elseif ($username !== '' && $password !== '') {
         $stmt = $pdo->prepare("SELECT * FROM cms_users WHERE username = ? LIMIT 1");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['user_id']   = (int)$user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_role'] = $user['role']; // 'admin' o 'editor'
+            // Regenerar el ID de sesión DESPUÉS de validar credenciales
+            session_regenerate_id(true);
+
+            $_SESSION['user_id']   = $user['id'];
+            $_SESSION['user_name'] = $user['username'];
+            $_SESSION['user_role'] = $user['role'] ?? 'editor';
+
             header('Location: admin-panel.php');
             exit;
         } else {
+            // Pequeño delay para hacer un poco más costosos los ataques de fuerza bruta
+            usleep(300000); // 0.3 segundos
             $error = 'Usuario o contraseña incorrectos.';
         }
     } else {
@@ -122,10 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p class="login-subtitle">NZK Noticias en video / NZK Productora</p>
 
     <?php if ($error): ?>
-        <div class="login-error"><?= htmlspecialchars($error) ?></div>
+        <div class="login-error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
-    <form method="post" action="admin-login.php">
+    <form method="post" action="admin-login.php" autocomplete="off">
         <label for="user">Usuario</label>
         <input type="text" id="user" name="user" required>
 

@@ -1,71 +1,89 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
+require __DIR__ . '/includes/session.php';
+
+// Solo admins pueden acceder
+if (empty($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
     header('Location: admin-login.php');
     exit;
 }
 
 require __DIR__ . '/includes/db.php';
+require __DIR__ . '/includes/security.php';
 
-function clean($v) { return htmlspecialchars($v ?? '', ENT_QUOTES, 'UTF-8'); }
+// Verificar CSRF (actúa solo en POST)
+csrf_verify();
 
-// --- ELIMINAR ---
-if (isset($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
-    if ($id > 0 && $id !== (int)$_SESSION['user_id']) { // no te borras a ti mismo
-        $stmt = $pdo->prepare("DELETE FROM cms_users WHERE id = ?");
-        $stmt->execute([$id]);
-    }
-    header('Location: admin-users.php');
-    exit;
+function clean($v) {
+    return htmlspecialchars($v ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-// --- CARGAR PARA EDITAR ---
-$editingUser = null;
-if (isset($_GET['edit'])) {
-    $id = (int)$_GET['edit'];
-    if ($id > 0) {
-        $stmt = $pdo->prepare("SELECT * FROM cms_users WHERE id = ? LIMIT 1");
-        $stmt->execute([$id]);
-        $editingUser = $stmt->fetch();
-    }
-}
+$currentUser = $_SESSION['user_name'] ?? 'Admin';
+$currentUserId = (int)($_SESSION['user_id'] ?? 0);
 
-// --- GUARDAR (CREAR / EDITAR) ---
+// ================================
+// MANEJO DE FORMULARIOS (POST)
+//  - Eliminar usuario
+//  - Crear / editar usuario
+// ================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // 1) ELIMINAR USUARIO
+    if (isset($_POST['delete_id'])) {
+        $id = (int)$_POST['delete_id'];
+
+        // No permitir que un usuario se elimine a sí mismo
+        if ($id > 0 && $id !== $currentUserId) {
+            $stmt = $pdo->prepare("DELETE FROM cms_users WHERE id = ?");
+            $stmt->execute([$id]);
+        }
+
+        header('Location: admin-users.php');
+        exit;
+    }
+
+    // 2) GUARDAR (CREAR / EDITAR)
     $id       = isset($_POST['id']) ? (int)$_POST['id'] : 0;
     $name     = trim($_POST['name'] ?? '');
     $username = trim($_POST['username'] ?? '');
-    $role     = $_POST['role'] === 'admin' ? 'admin' : 'editor';
+    $role     = ($_POST['role'] ?? '') === 'admin' ? 'admin' : 'editor';
     $password = trim($_POST['password'] ?? '');
+
+    // Validación básica
+    if ($name === '' || $username === '') {
+        header('Location: admin-users.php');
+        exit;
+    }
 
     if ($id > 0) {
         // UPDATE
         if ($password !== '') {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("
-              UPDATE cms_users
-              SET name = ?, username = ?, role = ?, password_hash = ?
-              WHERE id = ?
+                UPDATE cms_users
+                SET name = ?, username = ?, role = ?, password_hash = ?
+                WHERE id = ?
             ");
             $stmt->execute([$name, $username, $role, $hash, $id]);
         } else {
             $stmt = $pdo->prepare("
-              UPDATE cms_users
-              SET name = ?, username = ?, role = ?
-              WHERE id = ?
+                UPDATE cms_users
+                SET name = ?, username = ?, role = ?
+                WHERE id = ?
             ");
             $stmt->execute([$name, $username, $role, $id]);
         }
     } else {
         // INSERT
         if ($password === '') {
-            die('Debes indicar una contraseña para el nuevo usuario.');
+            // No hacemos die; simplemente redirigimos
+            header('Location: admin-users.php');
+            exit;
         }
+
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("
-          INSERT INTO cms_users (name, username, password_hash, role)
-          VALUES (?, ?, ?, ?)
+            INSERT INTO cms_users (name, username, password_hash, role)
+            VALUES (?, ?, ?, ?)
         ");
         $stmt->execute([$name, $username, $hash, $role]);
     }
@@ -74,11 +92,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// --- LISTADO ---
-$stmt = $pdo->query("SELECT * FROM cms_users ORDER BY created_at DESC");
-$users = $stmt->fetchAll();
+// ================================
+// CARGAR USUARIO PARA EDITAR (GET)
+// ================================
+$editingUser = null;
+if (isset($_GET['edit'])) {
+    $id = (int)$_GET['edit'];
+    if ($id > 0) {
+        $stmt = $pdo->prepare("SELECT * FROM cms_users WHERE id = ? LIMIT 1");
+        $stmt->execute([$id]);
+        $editingUser = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
 
-$currentUser = $_SESSION['user_name'] ?? 'Admin';
+// ================================
+// LISTADO DE USUARIOS
+// ================================
+$stmt = $pdo->query("SELECT * FROM cms_users ORDER BY created_at DESC");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -100,7 +131,9 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
       grid-template-columns: minmax(0,1.1fr) minmax(0,1.3fr);
       gap: 2rem;
     }
-    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
     .card {
       background: #0b1020;
       border-radius: 1rem;
@@ -114,16 +147,7 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
       color:#cbd5f5;
     }
     input[type="text"],
-    input[type="password"] {
-      width:100%;
-      padding:0.5rem 0.65rem;
-      border-radius:0.55rem;
-      border:1px solid rgba(148,163,184,0.4);
-      background:#020617;
-      color:#f9fafb;
-      font-size:0.9rem;
-      margin-bottom:0.7rem;
-    }
+    input[type="password"],
     select {
       width:100%;
       padding:0.5rem 0.65rem;
@@ -145,15 +169,46 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
       font-size:0.85rem;
       gap:0.35rem;
     }
-    .btn-primary { background:#4f8cff;color:#050b18;font-weight:600; }
-    .btn-secondary { background:transparent;color:#e5e7eb;border:1px solid rgba(148,163,184,0.7);text-decoration:none; }
-    .btn-danger { background:#dc2626;color:#fff; }
-    table{width:100%;border-collapse:collapse;font-size:0.85rem;}
-    th,td{padding:0.4rem 0.5rem;border-bottom:1px solid rgba(31,41,55,0.9);text-align:left;}
-    th{font-weight:600;color:#cbd5f5;}
-    tr:hover td{background:rgba(15,23,42,0.7);}
-    .pill{display:inline-block;padding:0.16rem 0.6rem;border-radius:999px;background:rgba(148,163,184,0.25);font-size:0.72rem;}
-    .header-bar{
+    .btn-primary {
+      background:#4f8cff;
+      color:#050b18;
+      font-weight:600;
+    }
+    .btn-secondary {
+      background:transparent;
+      color:#e5e7eb;
+      border:1px solid rgba(148,163,184,0.7);
+      text-decoration:none;
+    }
+    .btn-danger {
+      background:#dc2626;
+      color:#fff;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:0.85rem;
+    }
+    th,td {
+      padding:0.4rem 0.5rem;
+      border-bottom:1px solid rgba(31,41,55,0.9);
+      text-align:left;
+    }
+    th {
+      font-weight:600;
+      color:#cbd5f5;
+    }
+    tr:hover td {
+      background:rgba(15,23,42,0.7);
+    }
+    .pill {
+      display:inline-block;
+      padding:0.16rem 0.6rem;
+      border-radius:999px;
+      background:rgba(148,163,184,0.25);
+      font-size:0.72rem;
+    }
+    .header-bar {
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -171,7 +226,9 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
 <header class="header-bar">
   <div>
     <h1>Gestión de usuarios</h1>
-    <p style="margin:0;font-size:0.85rem;color:#9ca3af;">Solo administrador. Usuario actual: <?= clean($currentUser) ?></p>
+    <p style="margin:0;font-size:0.85rem;color:#9ca3af;">
+        Solo administrador. Usuario actual: <?= clean($currentUser) ?>
+    </p>
   </div>
   <div>
     <a href="admin-panel.php" class="btn-secondary">Volver al panel</a>
@@ -186,6 +243,7 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
     <h2 style="margin-top:0;"><?= $editingUser ? 'Editar usuario' : 'Nuevo usuario' ?></h2>
 
     <form method="post" action="admin-users.php">
+      <?php csrf_field(); ?>
       <input type="hidden" name="id" value="<?= $editingUser ? (int)$editingUser['id'] : 0 ?>">
 
       <label for="name">Nombre completo</label>
@@ -201,7 +259,7 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
       <label for="role">Rol</label>
       <select id="role" name="role">
         <option value="editor" <?= $editingUser && $editingUser['role']==='editor' ? 'selected' : '' ?>>Editor</option>
-        <option value="admin" <?= $editingUser && $editingUser['role']==='admin' ? 'selected' : '' ?>>Admin</option>
+        <option value="admin"  <?= $editingUser && $editingUser['role']==='admin'  ? 'selected' : '' ?>>Admin</option>
       </select>
 
       <label for="password">
@@ -247,13 +305,17 @@ $currentUser = $_SESSION['user_name'] ?? 'Admin';
             <td><?= clean($u['created_at']) ?></td>
             <td>
               <a href="admin-users.php?edit=<?= (int)$u['id'] ?>" style="color:#38bdf8;">Editar</a>
-              <?php if ((int)$u['id'] !== (int)$_SESSION['user_id']): ?>
-                <a href="admin-users.php?delete=<?= (int)$u['id'] ?>"
-                   style="color:#f97373;"
-                   onclick="return confirm('¿Eliminar este usuario?');">
-                   Eliminar
-                </a>
+
+              <?php if ((int)$u['id'] !== $currentUserId): ?>
+                <form method="post" action="admin-users.php"
+                      style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar este usuario?');">
+                  <?php csrf_field(); ?>
+                  <input type="hidden" name="delete_id" value="<?= (int)$u['id'] ?>">
+                  <button type="submit" class="btn-danger">Eliminar</button>
+                </form>
               <?php endif; ?>
+
             </td>
           </tr>
         <?php endforeach; ?>
