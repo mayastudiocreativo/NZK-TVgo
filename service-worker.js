@@ -3,7 +3,7 @@
 // ======================================================
 
 // Versión de cache
-const CACHE_NAME = "nzk-tvgo-v1.2";
+const CACHE_NAME = "nzk-tvgo-v1.3";
 
 // Archivos estáticos que se cachean
 const STATIC_ASSETS = [
@@ -11,9 +11,12 @@ const STATIC_ASSETS = [
   "/index.php",
   "/en-vivo.php",
   "/programacion.php",
-  "/programas.php",
-  "/noticias.php",
-  "/eventos.php",
+  "/programas.html",
+  "/programa.php",
+  "/noticias.html",
+  "/noticia.html",
+  "/eventos.html",
+  "/evento.html",
 
   "/assets/css/style.css",
   "/assets/js/main.js",
@@ -155,8 +158,5 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(title, options);
 
-  const CACHE_NAME = "nzk-tvgo-v1.3"; // antes v1.2
-
 });
-
 

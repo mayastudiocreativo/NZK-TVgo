@@ -189,7 +189,8 @@
               Disfruta nuestra selección de contenidos en la pantalla de NZK Televisión.
             </p>
 
-            <a href="./en-vivo" class="btn btn-live-cta hero-live-button">
+            <!-- Corregido: en-vivo.php -->
+            <a href="./en-vivo.php" class="btn btn-live-cta hero-live-button">
               <i class="fa-solid fa-play"></i>
               <span>Mirar en vivo</span>
             </a>
@@ -262,74 +263,70 @@
       </div>
     </section>
 
-    <!-- Banner intermedio -->
-    <?php include __DIR__ . '/includes/banner-bottom.php'; ?>
-
     <!-- =========================
          SECCIÓN: PROGRAMAS DE NZK
          category = 'programas'
     ========================== -->
-<?php
-  // Programas de NZK (cards del home)
-  $stmtProgramas = $pdo->query("
-    SELECT id, title, slug, description, thumbnail, created_at
-    FROM nzk_programas
-    ORDER BY created_at DESC
-    LIMIT 20
-  ");
-  $programasHome = $stmtProgramas->fetchAll();
-?>
+    <?php
+      // Programas de NZK (cards del home)
+      $stmtProgramas = $pdo->query("
+        SELECT id, title, slug, description, thumbnail, created_at
+        FROM nzk_programas
+        ORDER BY created_at DESC
+        LIMIT 20
+      ");
+      $programasHome = $stmtProgramas->fetchAll();
+    ?>
 
-<section class="section-carousel section-carousel-programas">
-  <div class="section-header">
-    <h2>Programas de NZK</h2>
-    <a href="/programas.php">Ver todos</a>
-  </div>
+    <section class="section-carousel section-carousel-programas">
+      <div class="section-header">
+        <h2>Programas de NZK</h2>
+        <a href="./programas.php">Ver todos</a>
+      </div>
 
-  <?php if (empty($programasHome)): ?>
-    <p>Todavía no hay programas cargados.</p>
-  <?php else: ?>
-    <div class="cards-row cards-row-programas">
-      <?php foreach ($programasHome as $prog): ?>
-        <article class="card video-card video-card--programa">
-          <!-- TODO el card completo clickeable -->
-          <a
-            href="./programa.php?slug=<?= urlencode($prog['slug']) ?>"
-            class="card-link card-link--full"
-          >
-            <div class="thumb-placeholder">
-              <?php if (!empty($prog['thumbnail'])): ?>
-                <img
-                  src="<?= htmlspecialchars($prog['thumbnail']) ?>"
-                  alt="<?= htmlspecialchars($prog['title']) ?>"
-                  loading="lazy"
-                  style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
-                >
-              <?php else: ?>
-                <span>Imagen programa</span>
-              <?php endif; ?>
-            </div>
+      <?php if (empty($programasHome)): ?>
+        <p>Todavía no hay programas cargados.</p>
+      <?php else: ?>
+        <div class="cards-row cards-row-programas">
+          <?php foreach ($programasHome as $prog): ?>
+            <article class="card video-card video-card--programa">
+              <!-- Card completo clickeable hacia la ficha del programa -->
+              <a
+                href="./programa.php?slug=<?= urlencode($prog['slug']) ?>"
+                class="card-link card-link--full"
+              >
+                <div class="thumb-placeholder">
+                  <?php if (!empty($prog['thumbnail'])): ?>
+                    <img
+                      src="<?= htmlspecialchars($prog['thumbnail']) ?>"
+                      alt="<?= htmlspecialchars($prog['title']) ?>"
+                      loading="lazy"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;"
+                    >
+                  <?php else: ?>
+                    <span>Imagen programa</span>
+                  <?php endif; ?>
+                </div>
 
-            <div class="card-body">
-              <h3 class="video-title">
-                <?= htmlspecialchars($prog['title']) ?>
-              </h3>
+                <div class="card-body">
+                  <h3 class="video-title">
+                    <?= htmlspecialchars($prog['title']) ?>
+                  </h3>
 
-              <?php if (!empty($prog['description'])): ?>
-                <p class="video-description">
-                  <?= htmlspecialchars($prog['description']) ?>
-                </p>
-              <?php endif; ?>
+                  <?php if (!empty($prog['description'])): ?>
+                    <p class="video-description">
+                      <?= htmlspecialchars($prog['description']) ?>
+                    </p>
+                  <?php endif; ?>
 
-              <span class="card-cta card-cta-programa">Ver programa</span>
-            </div>
-          </a>
-        </article>
-      <?php endforeach; ?>
-    </div>
-  <?php endif; ?>
-</section>
-
+                  <span class="card-cta card-cta-programa">Ver programa</span>
+                </div>
+              </a>
+            </article>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </section>
 
     <!-- =========================
          SECCIÓN: DOCUMENTALES / ENTREVISTAS
@@ -653,7 +650,8 @@
               }
             ?>
             <article class="card video-card">
-              <a href="./video.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
+              <!-- Para la productora usamos el wrapper video_productora.php -->
+              <a href="./video_productora.php?slug=<?= urlencode($video['slug']) ?>" class="card-link">
 
                 <div class="thumb-placeholder">
                   <?php if (!empty($video['thumbnail'])): ?>

@@ -299,6 +299,11 @@ img {
   gap: 1rem;
 }
 
+/* Variante full width debajo del hero para productora */
+.producer-hero + .hero-highlights {
+  margin-top: 1.2rem;
+}
+
 .hero-highlight-card {
   display: flex;
   gap: 0.7rem;
@@ -348,79 +353,6 @@ img {
   align-items: stretch;
 }
 
-.hero-live-highlight {
-  border-radius: 32px;
-  padding: 1px;
-  background: linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff);
-  max-width: 520px;
-  width: 100%;
-  height: 100%;
-}
-
-.hero-live-inner {
-  background: #050b18;
-  border-radius: inherit;
-  padding: 2.2rem 2.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  height: 100%;
-}
-
-/* Badge “Ahora en NZK TV” */
-.hero-live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #ff7ab8;
-}
-
-.hero-live-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: #ff4a4a;
-  box-shadow: 0 0 10px rgba(255, 74, 74, 0.9);
-}
-
-/* Thumb del programa */
-.hero-live-thumb {
-  margin: 0.75rem 0 1.1rem;
-  border-radius: 22px;
-  overflow: hidden;
-}
-
-.hero-live-thumb img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Textos card */
-.hero-live-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.hero-live-time {
-  font-size: 0.95rem;
-  color: #c4c8de;
-}
-
-.hero-live-category {
-  font-size: 0.9rem;
-  color: #9ca1c5;
-}
-
-.hero-live-desc {
-  font-size: 0.95rem;
-  color: #d5d9f5;
-  margin-top: 0.5rem;
-}
-
 /* Botón Mirar en vivo */
 .hero-live-button {
   margin-top: auto;
@@ -436,12 +368,6 @@ img {
   background:
     linear-gradient(#050b18, #050b18) padding-box,
     linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
-}
-
-.hero-live-button-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Versión del panel en el home reutilizando estilos del EN VIVO */
@@ -468,8 +394,10 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .hero-live-highlight {
-    max-width: 100%;
+  /* Panel tipo card full width en tablets (iPad) */
+  .live-meta-panel-home {
+    max-width: none;
+    width: 100%;
   }
 }
 
@@ -548,20 +476,6 @@ img {
 }
 
 /* CTA flotante opcional */
-.card-quick-cta {
-  position: absolute;
-  right: 0.9rem;
-  bottom: 0.9rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(5, 11, 24, 0.75);
-  backdrop-filter: blur(6px);
-}
-
 /* Thumbs genéricas */
 .thumb-placeholder {
   background: linear-gradient(135deg, #1f2744, #12182a);
@@ -898,20 +812,6 @@ img {
     margin-right: auto;
     flex: 0 0 auto;
   }
-
-  .header-actions {
-    margin-left: auto;
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .header-actions .action-gradient-btn {
-    font-size: 0.9rem;
-    padding: 0.45rem 1rem;
-    white-space: nowrap;
-  }
 }
 
 /* ============================================
@@ -1193,11 +1093,6 @@ img {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
-}
-
-.live-label-now {
-  background: #ff4a4a;
-  color: #050b18;
 }
 
 .live-label-next,
@@ -1696,111 +1591,31 @@ img {
   align-items: center;
 }
 
-.producer-kicker {
-  color: #ff82a3;
-  letter-spacing: 0.08em;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-}
-
-.producer-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 0.8rem;
-}
-
-.producer-lead {
-  font-size: 1.2rem;
-  color: #d7d9e3;
-  line-height: 1.5;
-  max-width: 560px;
-}
-
-.producer-highlights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 1.4rem 0 1.8rem;
-}
-
-.producer-highlight {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  color: #f4f6ff;
-}
-
-.producer-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  font-size: 1rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(#050b18, #050b18) padding-box,
-    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-/* --- CARD DERECHA --- */
-
-.producer-card {
-  background: rgba(0, 0, 0, 0.27);
-  backdrop-filter: blur(28px);
-  border-radius: 1.5rem;
-  padding: 1.8rem;
-  border: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-}
-
-.producer-card-img img {
-  width: 100%;
-  border-radius: 1rem;
-  height: 180px;
-  object-fit: cover;
-}
-
-.producer-card-content .producer-tag {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  font-size: .85rem;
-  color: #ff7f7f;
-}
-
-.tag-dot {
-  width: 8px;
-  height: 8px;
-  background: #ff4757;
-  border-radius: 50%;
-}
-
-.producer-card-content h3 {
-  font-size: 1.5rem;
-  margin: .4rem 0 .6rem;
-  color: #fff;
-}
-
-.producer-card-content p {
-  color: #d2d4de;
-  margin-bottom: 1.4rem;
-}
-
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .producer-hero {
     grid-template-columns: 1fr;
+  }
+}
+
+/* iPad Pro / tablets grandes: apilar imagen arriba y texto abajo en el panel derecho */
+@media (max-width: 1366px) and (min-width: 901px) {
+  .producer-hero .live-meta-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .producer-hero .live-meta-poster {
+    width: 100%;
+    height: 220px;
+    margin: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .producer-hero .live-meta-content {
+    width: 100%;
   }
 }
 
@@ -1933,28 +1748,13 @@ img {
     transform: translateY(0);
     box-shadow: 0 3px 12px rgba(37, 99, 235, 0.35);
 }
-.page-hero-programa {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  align-items: center;
-}
 
-.page-hero-programa-media {
-  max-width: 520px;
-}
 
 .program-hero-image {
   width: 100%;
   border-radius: 1rem;
   display: block;
   box-shadow: 0 24px 60px rgba(15,23,42,0.9);
-}
-
-.page-hero-programa-info h1 {
-  margin: 0 0 0.75rem;
-  font-size: 1.6rem;
 }
 
 .program-hero-description {
@@ -1970,17 +1770,97 @@ img {
 }
 
 /* grid de episodios */
-/* ===== HERO DEL PROGRAMA (tipo cabecera Netflix) ===== */
-.page-hero-programa {
-  display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(0, 3fr);
-  gap: 1.8rem;
-  margin-bottom: 2.2rem;
-  align-items: center;
+/* ===========================================================
+   HERO DE PROGRAMAS – estilo cinematográfico NZK (match HERO HOME)
+=========================================================== */
+
+.program-hero-wrapper {
+  max-width: 1300px;
+  margin: 2.5rem auto 3rem auto;
+  padding: 0 1rem;
 }
 
-.page-hero-programa-media {
+/* Caja premium con degradado, sombras profundas y borde sutil */
+.program-hero-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+  gap: 2.4rem;
+  padding: 2.8rem 2.4rem;
+  border-radius: 28px;
+
+  /* MISMO estilo de tu HERO principal */
+  background: radial-gradient(220% 160% at 0% 0%, #1b2144 0%, #070a16 40%, #050814 100%);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+/* Efectos decorativos (matching exacto del hero del home) */
+.program-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 102, 178, 0.14) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(0, 188, 255, 0.18) 0, transparent 60%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.program-hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, rgba(0, 0, 0, 0.45), transparent 55%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.program-hero-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Imagen del programa */
+.program-hero-media img {
+  width: 100%;
+  border-radius: 1.4rem;
+  display: block;
+  box-shadow: 0 26px 60px rgba(15, 23, 42, 0.95);
+}
+
+/* Info del hero */
+.program-hero-info h1 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.9rem, 2vw + 1rem, 2.6rem);
+  font-weight: 800;
+}
+
+.program-hero-description {
+  font-size: 1.05rem;
+  line-height: 1.55;
   max-width: 520px;
+  color: rgba(219, 227, 255, 0.9);
+  margin-bottom: 0.9rem;
+}
+
+.program-meta {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .program-hero-card {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.4rem;
+  }
+
+  .program-hero-wrapper {
+    margin-top: 1.5rem;
+  }
 }
 
 .program-hero-image {
@@ -1988,11 +1868,6 @@ img {
   border-radius: 1.2rem;
   display: block;
   box-shadow: 0 26px 60px rgba(15,23,42,0.95);
-}
-
-.page-hero-programa-info h1 {
-  margin: 0 0 0.6rem;
-  font-size: 1.7rem;
 }
 
 .program-hero-description {
@@ -2010,12 +1885,6 @@ img {
 
 /* Responsive hero */
 @media (max-width: 900px) {
-  .page-hero-programa {
-    grid-template-columns: 1fr;
-  }
-  .page-hero-programa-media {
-    max-width: 100%;
-  }
 }
 
 /* ===== EPISODIOS – fila tipo Netflix ===== */
@@ -2055,22 +1924,32 @@ img {
 }
 
 /* Cada card de episodio */
+/* Cada card de episodio */
 .episode-card {
   flex: 0 0 230px;
   scroll-snap-align: start;
 }
 
+/* Card con borde degradado, siguiendo la línea visual de las otras cards */
 .episode-link {
   display: flex;
   flex-direction: column;
-  background: #020617;
   border-radius: 0.9rem;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  border: 1px solid rgba(15,23,42,0.9);
-  box-shadow: 0 14px 35px rgba(15,23,42,0.9);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+
+  /* truco del borde degradado reutilizando el mismo degradado que .card:hover */
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(#020617, #020617) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.9);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
 .episode-thumb {
@@ -2087,11 +1966,10 @@ img {
   display: block;
 }
 
-/* Hover: subir un poco el card, más luz */
+/* Hover: un poco más de elevación y luz, pero manteniendo el mismo degradado */
 .episode-link:hover {
   transform: translateY(-4px);
-  border-color: rgba(59,130,246,0.8);
-  box-shadow: 0 18px 45px rgba(15,23,42,1);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 1);
 }
 
 /* Info del episodio */
@@ -2122,29 +2000,6 @@ img {
   .episode-card {
     flex: 0 0 70%;
   }
-}
-
-/* ===========================================================
-   CONTENEDOR PRINCIPAL TIPO CARD PREMIUM (DEGRADADO Y SOMBRA)
-   =========================================================== */
-
-.program-hero-wrapper {
-  max-width: 1250px;
-  margin: 0 auto 2.5rem auto;
-  padding: 0 1rem;
-}
-
-.program-hero-card {
-  background: linear-gradient(135deg, rgba(18, 26, 48, 0.85), rgba(4, 8, 18, 0.92));
-  border-radius: 1.8rem;
-  padding: 2rem 2.5rem;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 25px 70px rgba(0,0,0,0.55);
-  
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2fr);
-  gap: 2.2rem;
-  align-items: center;
 }
 
 /* Imagen del programa */
@@ -2183,4 +2038,246 @@ img {
   max-width: 1250px;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+/* ============================================
+   EPISODIOS — Fix para quitar borde interno y 
+   mantener únicamente el borde degradado en hover
+============================================ */
+
+/* Base limpia sin bordes visibles */
+.episode-card {
+  border: none !important;
+  background: #0b1020;
+  border-radius: 1.2rem;
+  padding: 0.9rem;
+  transition: all 0.22s ease;
+}
+
+/* El contenedor interno tampoco debe tener borde */
+.episode-link {
+  border: none !important;
+  background: #0b1020;
+}
+
+/* Hover con borde degradado estilo NZK */
+.episode-card:hover {
+  border: 1.8px solid transparent !important;
+  background:
+    linear-gradient(#0b1020, #0b1020) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
+  transform: translateY(-4px);
+}
+
+/* Evitar que la imagen o contenido genere "doble borde" */
+.episode-thumb {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Mantener redondeado consistente */
+.episode-link {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* ===== Carrusel debajo del video (video.php) ===== */
+
+.section-carousel-episodes {
+  margin-top: 2.2rem;
+}
+
+/* un pelín más compacto en esta página */
+.section-carousel-episodes .card.episode-card-slider {
+  min-height: 0;
+}
+
+/* Texto "Ver más programas" con líneas */
+.section-more-programs {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-more-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 74, 74, 0.1), rgba(79, 140, 255, 0.8), rgba(138, 44, 255, 0.1));
+}
+
+.section-more-text {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #e5e7eb;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.section-more-text:hover {
+  opacity: 1;
+}
+
+/* ============================
+   PRODUCTORA — CTA PRINCIPAL
+================================= */
+
+.section-cta-productora .cta-card {
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+.section-cta-productora .cta-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.section-cta-productora .cta-icon {
+  margin-top: 0.1rem;
+}
+
+.section-cta-productora .cta-content h3 {
+  margin: 0 0 0.4rem;
+}
+
+.section-cta-productora .cta-content p {
+  margin: 0;
+}
+
+.section-cta-productora .cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 0.9rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.section-cta-productora .cta-actions .btn {
+  width: 220px;
+  min-width: 220px;
+  justify-content: center;
+  height: 44px;
+  padding: 0 1rem;
+  align-items: center;
+  display: inline-flex;
+}
+
+.section-cta-productora .cta-actions .btn-live-cta {
+  width: 220px;
+  min-width: 220px;
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .section-cta-productora .cta-layout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ============================
+   PRODUCTORA — GRID DE SERVICIOS 2x2
+================================= */
+
+.producer-services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.producer-service-card {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  overflow: hidden;
+  align-items: stretch;
+  min-height: 200px;
+}
+
+/* En móviles, 1 por fila */
+@media (max-width: 700px) {
+  .producer-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .producer-service-card {
+    flex-direction: column;
+  }
+
+  .producer-service-media {
+    width: 100%;
+  }
+
+  .producer-service-media img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.producer-service-media img {
+  width: 160px;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Override móvil: imagen full width y cover */
+@media (max-width: 700px) {
+  .producer-service-card {
+    flex-direction: column;
+  }
+
+  .producer-service-media {
+    width: 100%;
+  }
+
+  .producer-service-media img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+}
+
+/* Contenido a la derecha: icono arriba, luego texto */
+.producer-service-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem 1.1rem;
+  flex: 1;
+}
+
+.producer-service-body .hero-highlight-icon {
+  margin: 0;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.producer-service-body .hero-highlight-icon i {
+  font-size: 1.1rem;
+}
+
+.producer-service-body .hero-highlight-text h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.producer-service-body .hero-highlight-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+/* Mantener el grid 2x2 (solo 1 columna en móviles pequeños) */
+@media (max-width: 700px) {
+  .producer-services-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -2,12 +2,15 @@
 // video.php
 require __DIR__ . '/includes/db.php';
 
-$slug = $_GET['slug'] ?? '';
+$slug            = $_GET['slug']    ?? '';
+$programFromUrl  = $_GET['program'] ?? null; // viene desde programa.php o video_programa.php
+
 if ($slug === '') {
   header('Location: ./');
   exit;
 }
 
+// Traer el video actual por slug
 $stmt = $pdo->prepare("SELECT * FROM nzk_videos WHERE slug = ? LIMIT 1");
 $stmt->execute([$slug]);
 $video = $stmt->fetch();
@@ -18,8 +21,24 @@ if (!$video) {
   exit;
 }
 
+// ¿Es video de la productora?
+$isProductora = (($video['category'] ?? '') === 'productora');
+
+// -----------------------------------------
+// Determinar el "slug" del programa (para programas de NZK)
+// prioridad:
+// 1) parámetro ?program= (desde programa.php / video_programa.php)
+// 2) patrón del slug del episodio: antes de "-Ep"
+// -----------------------------------------
+$programSlugBase = $programFromUrl;
+
+if (!$programSlugBase && preg_match('~^(.*?)-Ep[0-9]+~i', $slug, $m)) {
+  // ej: yo-emprendedor-Ep01-Temp01 -> yo-emprendedor
+  $programSlugBase = $m[1];
+}
+
 // URL puede ser Facebook o YouTube
-$rawUrl = trim($video['fb_url']);
+$rawUrl   = trim($video['fb_url']);
 $provider = 'facebook';
 $embedUrl = $rawUrl;
 
@@ -48,6 +67,56 @@ if (!empty($video['published_at'])) {
   if ($ts) {
     $fechaLegible = date('d/m/Y · H:i', $ts);
   }
+}
+
+// ----------------------------------------------------------
+// EPISODIOS / PRODUCCIONES RECIENTES
+//  - si es productora: solo category = 'productora'
+//  - si tenemos $programSlugBase: solo episodios de ese programa
+//  - si no, fallback: últimos videos globales
+// ----------------------------------------------------------
+$episodiosRecientes = [];
+
+try {
+  if ($isProductora) {
+    // Solo producciones de la productora
+    $stmtEp = $pdo->prepare(
+      "SELECT *
+       FROM nzk_videos
+       WHERE category = 'productora'
+         AND slug <> ?
+       ORDER BY published_at DESC
+       LIMIT 12"
+    );
+    $stmtEp->execute([$slug]);
+
+  } elseif ($programSlugBase) {
+    // Episodios del mismo programa (por prefijo de slug)
+    $stmtEp = $pdo->prepare(
+      "SELECT *
+       FROM nzk_videos
+       WHERE slug LIKE ?
+         AND slug <> ?
+       ORDER BY published_at DESC
+       LIMIT 12"
+    );
+    $stmtEp->execute([$programSlugBase . '%', $slug]);
+
+  } else {
+    // Fallback: últimos videos globales
+    $stmtEp = $pdo->prepare(
+      "SELECT *
+       FROM nzk_videos
+       WHERE slug <> ?
+       ORDER BY published_at DESC
+       LIMIT 12"
+    );
+    $stmtEp->execute([$slug]);
+  }
+
+  $episodiosRecientes = $stmtEp->fetchAll();
+} catch (Exception $e) {
+  $episodiosRecientes = [];
 }
 ?>
 <!DOCTYPE html>
@@ -102,7 +171,7 @@ if (!empty($video['published_at'])) {
         <div class="live-meta-content">
           <span class="live-tag">
             <span class="live-dot"></span>
-            <?php if (($video['category'] ?? '') === 'productora'): ?>
+            <?php if ($isProductora): ?>
               NZK PRODUCTORA AUDIOVISUAL
             <?php else: ?>
               NZK NOTICIAS EN VIDEO
@@ -128,6 +197,82 @@ if (!empty($video['published_at'])) {
         </div>
       </aside>
     </section>
+
+    <?php if (!empty($episodiosRecientes)): ?>
+      <section class="section-carousel section-carousel-episodes container">
+        <div class="section-header">
+          <h2>
+            <?= $isProductora
+              ? 'Producciones recientes de NZK Productora'
+              : 'Episodios recientes de este programa'; ?>
+          </h2>
+        </div>
+
+        <div class="cards-row">
+          <?php foreach ($episodiosRecientes as $ep): ?>
+            <?php
+              // preservamos el ?program= en los links del carrusel SOLO para programas
+              $programQuery = (!$isProductora && $programSlugBase)
+                ? '&program=' . urlencode($programSlugBase)
+                : '';
+              $epUrl = './video.php?slug=' . urlencode($ep['slug']) . $programQuery;
+            ?>
+            <article class="card episode-card-slider">
+              <a
+                href="<?= $epUrl ?>"
+                class="episode-link js-episode-link"
+                data-episode-url="<?= $epUrl ?>"
+              >
+                <div class="episode-thumb">
+                  <?php if (!empty($ep['thumbnail'])): ?>
+                    <img
+                      src="<?= htmlspecialchars($ep['thumbnail']) ?>"
+                      alt="<?= htmlspecialchars($ep['title']) ?>"
+                      loading="lazy"
+                    >
+                  <?php else: ?>
+                    <span>Sin imagen</span>
+                  <?php endif; ?>
+                </div>
+
+                <div class="episode-info">
+                  <h3 class="episode-title">
+                    <?= htmlspecialchars($ep['title']) ?>
+                  </h3>
+
+                  <?php if (!empty($ep['published_at'])): ?>
+                    <p class="episode-meta">
+                      <?= date('d/m/Y · H:i', strtotime($ep['published_at'])) ?>
+                    </p>
+                  <?php endif; ?>
+
+                  <?php if (!empty($ep['description'])): ?>
+                    <p class="episode-description">
+                      <?= htmlspecialchars($ep['description']) ?>
+                    </p>
+                  <?php endif; ?>
+                </div>
+              </a>
+            </article>
+          <?php endforeach; ?>
+        </div>
+
+        <?php if (!$isProductora && $programSlugBase): ?>
+          <!-- Línea + texto "Ver más programas" SOLO para programas -->
+          <div class="section-more-programs">
+            <span class="section-more-line"></span>
+            <a
+              href="./programa.php?slug=<?= urlencode($programSlugBase) ?>"
+              class="section-more-text"
+            >
+              Ver más programas
+            </a>
+            <span class="section-more-line"></span>
+          </div>
+        <?php endif; ?>
+      </section>
+    <?php endif; ?>
+
   </main>
 
   <?php include __DIR__ . '/includes/footer.php'; ?>
@@ -139,5 +284,57 @@ if (!empty($video['published_at'])) {
             nonce="nzkTvGo">
     </script>
   <?php endif; ?>
+
+  <!-- JS para cambiar de episodio sin salir de video.php -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const episodeLinks = document.querySelectorAll('.js-episode-link');
+    if (!episodeLinks.length) return;
+
+    episodeLinks.forEach(link => {
+      link.addEventListener('click', async function (e) {
+        if (!window.fetch || !window.history) return; // fallback navegando normal
+
+        e.preventDefault();
+
+        const url = this.dataset.episodeUrl || this.href;
+        const heroContainer = document.querySelector('.page-video .live-hero-inner');
+
+        if (!heroContainer || !url) {
+          window.location.href = url;
+          return;
+        }
+
+        heroContainer.style.opacity = '0.35';
+
+        try {
+          const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+          const html = await res.text();
+
+          const temp = document.createElement('div');
+          temp.innerHTML = html;
+
+          let newHero = temp.querySelector('.page-video .live-hero-inner');
+          if (!newHero) {
+            newHero = temp.querySelector('.live-hero-inner');
+          }
+
+          if (newHero) {
+            heroContainer.replaceWith(newHero);
+            window.history.pushState({}, '', url);
+          } else {
+            window.location.href = url;
+          }
+        } catch (err) {
+          console.error('Error cargando episodio:', err);
+          window.location.href = url;
+        } finally {
+          const currentHero = document.querySelector('.page-video .live-hero-inner') || heroContainer;
+          currentHero.style.opacity = '1';
+        }
+      });
+    });
+  });
+  </script>
 </body>
 </html>

@@ -30,22 +30,20 @@ if (!isset($currentPage)) {
         Programación
       </a>
 
-      <a href="./programas.php"
+      <a href="./programas.html"
          class="nav-link <?php echo ($currentPage === 'shows') ? 'is-active' : ''; ?>">
         Programas
       </a>
 
-      <a href="./noticias.php"
+      <a href="./noticias.html"
          class="nav-link <?php echo ($currentPage === 'news') ? 'is-active' : ''; ?>">
         Noticias
       </a>
 
-      <a href="./eventos.php"
+      <a href="./eventos.html"
          class="nav-link <?php echo ($currentPage === 'events') ? 'is-active' : ''; ?>">
         Eventos especiales
       </a>
-    </nav>
-
     </nav>
 
 <!-- Firebase Cloud Messaging centralizado -->
@@ -120,38 +118,3 @@ if (!isset($currentPage)) {
 
   </div>
 </header>
-
-<!-- NAV MÓVIL (BOTTOM NAV) -->
-<nav class="bottom-nav neo-nav">
-
-  <a href="./index.php"
-     class="nav-item <?php echo ($currentPage === 'home') ? 'active' : ''; ?>">
-    <i class="fas fa-house"></i>
-    <span>Inicio</span>
-  </a>
-
-  <a href="./en-vivo.php"
-     class="nav-item <?php echo ($currentPage === 'live') ? 'active' : ''; ?>">
-    <i class="fas fa-tower-broadcast"></i>
-    <span>En vivo</span>
-  </a>
-
-  <a href="./programacion.php"
-     class="nav-item <?php echo ($currentPage === 'schedule') ? 'active' : ''; ?>">
-    <i class="fas fa-calendar-days"></i>
-    <span>Prog.</span>
-  </a>
-
-  <a href="./programas.php"
-     class="nav-item <?php echo ($currentPage === 'shows') ? 'active' : ''; ?>">
-    <i class="fas fa-clapperboard"></i>
-    <span>Programas</span>
-  </a>
-
-  <a href="./noticias.php"
-     class="nav-item <?php echo ($currentPage === 'news') ? 'active' : ''; ?>">
-    <i class="fas fa-newspaper"></i>
-    <span>Noticias</span>
-  </a>
-
-</nav>
