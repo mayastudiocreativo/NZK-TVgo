@@ -2,6 +2,7 @@
   // Página actual para marcar el menú activo
   $currentPage = 'home';
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -459,29 +460,6 @@
       </div>
     </section>
 
-    <!-- Noticias del portal (se mantiene estática por ahora) -->
-    <section class="section-list">
-      <div class="section-header">
-        <h2>Noticias recientes del portal</h2>
-        <a href="/noticias.php">Ir a noticias</a>
-      </div>
-      <div class="cards-column">
-        <article class="card news-card">
-          <div class="thumb-placeholder">Imagen noticia</div>
-          <div>
-            <h3>Titular de noticia reciente</h3>
-            <p>Resumen corto de la noticia publicada en el portal.</p>
-          </div>
-        </article>
-        <article class="card news-card">
-          <div class="thumb-placeholder">Imagen noticia</div>
-          <div>
-            <h3>Otro titular de noticia</h3>
-            <p>Descripción breve para invitar al usuario a leer más.</p>
-          </div>
-        </article>
-      </div>
-    </section>
 
     <!-- =========================
          SECCIÓN: EVENTOS ESPECIALES
@@ -520,7 +498,7 @@
             ?>
             <article class="card video-card">
               <a href="<?= htmlspecialchars($videoUrl, ENT_QUOTES, 'UTF-8') ?>" class="card-link">
-                <div class="thumb-placeholder">
+                <div class="thumb-placeholder thumb-placeholder-news">
                   <?php if (!empty($video['thumbnail'])): ?>
                     <img
                       src="<?= htmlspecialchars($video['thumbnail'], ENT_QUOTES, 'UTF-8') ?>"

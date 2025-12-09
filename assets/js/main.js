@@ -230,13 +230,15 @@ function updateCarousel() {
 
   // Panel lateral EN VIVO (página en-vivo.php)
   const mainTitleEl = document.getElementById("live-main-title");
-  const mainTimeEl = document.getElementById("live-main-time");
-  const mainImgEl = document.getElementById("live-main-img");
+  const mainTimeEl  = document.getElementById("live-main-time");
+  const mainImgEl   = document.getElementById("live-main-img");
+  const mainDescEl  = document.getElementById("live-main-desc"); // 👈 NUEVO
 
   if (mainTitleEl) mainTitleEl.innerText = current.title;
   if (mainTimeEl)
     mainTimeEl.innerText = `${current.start} - ${current.end} · ${current.category}`;
   if (mainImgEl) mainImgEl.src = current.img;
+  if (mainDescEl) mainDescEl.textContent = getProgramDescription(current); // 👈 NUEVO
 
   // Card "Estás viendo" (si aún existe en el strip)
   updateCard("current", current);
@@ -554,8 +556,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  
-
   // Player en vivo (solo en en-vivo.php)
   const video = document.getElementById("videoPlayer");
   if (video) {
@@ -579,7 +579,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateHomeHeroLiveHighlight, 60000);
   }
 
-  
   // Página de programación
   initSchedulePage();
 });
@@ -603,9 +602,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1800);
     }
   }
-
-  // ... AQUÍ DEJAS TODO LO QUE YA TENÍAS:
-  // toggle menú, initLivePlayer, updateCarousel, initSchedulePage, etc.
 });
 
 function initProgramasCarousel() {
@@ -638,6 +634,5 @@ function initProgramasCarousel() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ... aquí ya tendrás otras inicializaciones tuyas ...
   initProgramasCarousel();
 });
