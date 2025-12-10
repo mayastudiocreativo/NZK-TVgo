@@ -129,49 +129,92 @@ function updateQualityButtonLabel(btn, quality) {
 }
 
 // ========================================
-// PROGRAMACIÓN L–V y S–D
+// PROGRAMACIÓN DESDE BD (schedule-json.php)
 // ========================================
 
-// PROGRAMACIÓN COMPLETA DE LUNES A VIERNES
-const scheduleWeek = [
-  { start: "00:00", end: "02:30", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "02:30", end: "04:30", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "04:30", end: "05:30", title: "NCIS Criminología Naval", category: "Serie", img: "img/series/ncis.jpg" },
-  { start: "05:30", end: "07:30", title: "HIT TV NZK", category: "Música", img: "img/musica/hit.jpg" },
-  { start: "07:30", end: "08:30", title: "El Chapulin Colorado", category: "Serie", img: "img/series/chapulin.jpg" },
-  { start: "08:30", end: "10:00", title: "Alerta Aeropuerto", category: "Serie", img: "img/series/alertaAeropuerto.jpg" },
-  { start: "10:00", end: "11:00", title: "Mi Camino es Amarte", category: "Novela", img: "img/novelas/miCaminoEsAmarte.jpg" },
-  { start: "11:00", end: "12:00", title: "Minas de Pasión", category: "Novela", img: "img/novelas/minasdePasion.jpg" },
-  { start: "12:00", end: "13:00", title: "The Good Doctor", category: "Serie", img: "img/series/gooddoctor.jpg" },
-  { start: "13:00", end: "13:30", title: "HIT TV NZK", category: "Música", img: "img/musica/hit.jpg" },
-  { start: "13:30", end: "15:00", title: "NZK Noticias Edición Medio Día", category: "Noticias", img: "img/noticieros/nzk-mediodia.jpg" },
-  { start: "15:00", end: "16:00", title: "La Reina del Flow - Temp-01", category: "Serie", img: "img/series/laReinaDelFlow.jpg" },
-  { start: "16:00", end: "17:00", title: "The Good Doctor", category: "Serie", img: "img/series/gooddoctor.jpg" },
-  { start: "17:00", end: "19:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "19:00", end: "19:50", title: "NCIS Criminología Naval", category: "Serie", img: "img/series/ncis.jpg" },
-  { start: "19:50", end: "20:00", title: "HIT TV NZK", category: "Música", img: "img/musica/hit.jpg" },
-  { start: "20:00", end: "21:30", title: "NZK Noticias Edición Central", category: "Noticias", img: "img/noticieros/nzk-central.jpg" },
-  { start: "21:30", end: "22:30", title: "NCIS Los Ángeles", category: "Serie", img: "img/series/ncis-la.jpg" },
-  { start: "22:30", end: "00:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" }
-];
+let scheduleDataByDay = null; // {0: [...],1:[...],...,6:[...]}
 
-// PROGRAMACIÓN DE SÁBADOS Y DOMINGOS
-const scheduleWeekend = [
-  { start: "00:00", end: "02:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "02:00", end: "04:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "04:00", end: "06:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "06:00", end: "08:00", title: "HIT TV NZK", category: "Música", img: "img/musica/hit.jpg" },
-  { start: "08:00", end: "09:00", title: "Dragon Ball Super", category: "Dibujo Animado", img: "img/dibujos/dragonBallSuper.jpg" },
-  { start: "09:00", end: "11:00", title: "El Chapulin Colorado", category: "Serie", img: "img/series/chapulin.jpg" },
-  { start: "11:00", end: "12:00", title: "Dragon Ball Z", category: "Dibujo Animado", img: "img/dibujos/dragonBallZ.jpg" },
-  { start: "12:00", end: "12:30", title: "HIT TV NZK", category: "Música", img: "img/musica/hit.jpg" },
-  { start: "12:30", end: "14:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "14:00", end: "16:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "16:00", end: "18:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "18:00", end: "20:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "20:00", end: "22:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" },
-  { start: "22:00", end: "00:00", title: "Cine en Casa", category: "Película", img: "img/cine/cine.jpg" }
-];
+/**
+ * Normaliza diferentes formatos de respuesta de schedule-json.php
+ * a un objeto { 0: [...], 1: [...], ... 6: [...] }
+ */
+function normalizeScheduleJson(json) {
+  if (!json) return {};
+
+  // Caso 1: json.byDay ya es objeto con 0..6
+  if (json.byDay && !Array.isArray(json.byDay) && typeof json.byDay === "object") {
+    return json.byDay;
+  }
+
+  // Caso 2: json.byDay es array de 7 posiciones
+  if (Array.isArray(json.byDay)) {
+    const map = {};
+    json.byDay.forEach((slots, idx) => {
+      map[idx] = slots || [];
+    });
+    return map;
+  }
+
+  // Caso 3: json.week / json.weekend
+  if (json.week || json.weekend) {
+    const map = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+    const week = json.week || [];
+    const weekend = json.weekend || [];
+    // Lunes-viernes -> 1..5
+    for (let d = 1; d <= 5; d++) {
+      map[d] = week;
+    }
+    // Domingo (0) y sábado (6)
+    map[0] = weekend;
+    map[6] = weekend;
+    return map;
+  }
+
+  return {};
+}
+
+/**
+ * Carga la parrilla desde PHP una sola vez y la cachea.
+ */
+async function loadScheduleData() {
+  if (scheduleDataByDay) return scheduleDataByDay;
+
+  const urls = ["/schedule-json.php", "./schedule-json.php", "schedule-json.php"];
+
+  let lastError = null;
+
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: "application/json" }
+      });
+      if (!res.ok) {
+        lastError = new Error("HTTP " + res.status + " en " + url);
+        continue;
+      }
+      const json = await res.json();
+      scheduleDataByDay = normalizeScheduleJson(json);
+      console.log("✅ Parrilla cargada desde", url, scheduleDataByDay);
+      return scheduleDataByDay;
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  console.error("❌ No se pudo cargar la parrilla:", lastError);
+  scheduleDataByDay = {};
+  return scheduleDataByDay;
+}
+
+/**
+ * Devuelve el arreglo de programación según el día de la semana JS.
+ * jsDay: 0 = domingo ... 6 = sábado
+ */
+function getScheduleForJsDay(jsDay) {
+  if (!scheduleDataByDay) return [];
+  const d = Number(jsDay);
+  return scheduleDataByDay[d] || [];
+}
 
 /**
  * Helper para obtener el bloque de programación con offset
@@ -179,6 +222,7 @@ const scheduleWeekend = [
  */
 function getProgram(schedule, currentIndex, offset) {
   const len = schedule.length;
+  if (!len) return null;
   return schedule[(currentIndex + offset + len) % len];
 }
 
@@ -194,151 +238,25 @@ function updateCard(prefix, data) {
   const timeEl = document.getElementById(`${prefix}-time`);
   const catEl = document.getElementById(`${prefix}-category`);
 
-  if (imgEl) imgEl.src = data.img;
+  if (imgEl) {
+    imgEl.src = data.img;
+    imgEl.alt = data.title || "";
+  }
   if (titleEl) titleEl.innerText = data.title;
   if (timeEl) timeEl.innerText = `${data.start} - ${data.end}`;
   if (catEl) catEl.innerText = data.category;
 }
 
-/**
- * Actualiza panel lateral y strip de programación según la hora actual.
- * Panel: "Ahora en vivo"
- * Cards: A continuación / Más adelante / Próximamente / Muy pronto
- */
-function updateCarousel() {
-  const now = new Date();
-  const day = now.getDay(); // 0 domingo, 6 sábado
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const currentTime = `${hour.toString().padStart(2, "0")}:${minute
-    .toString()
-    .padStart(2, "0")}`;
-
-  const schedule = day === 6 || day === 0 ? scheduleWeekend : scheduleWeek;
-
-  let currentIndex = schedule.findIndex(
-    (p) => p.start <= currentTime && p.end > currentTime
-  );
-  if (currentIndex === -1) currentIndex = schedule.length - 1;
-
-  // Bloques: actual + próximos 4
-  const current = getProgram(schedule, currentIndex, 0);
-  const next = getProgram(schedule, currentIndex, 1);
-  const later = getProgram(schedule, currentIndex, 2);
-  const soon = getProgram(schedule, currentIndex, 3);
-  const verySoon = getProgram(schedule, currentIndex, 4);
-
-  // Panel lateral EN VIVO (página en-vivo.php)
-  const mainTitleEl = document.getElementById("live-main-title");
-  const mainTimeEl  = document.getElementById("live-main-time");
-  const mainImgEl   = document.getElementById("live-main-img");
-  const mainDescEl  = document.getElementById("live-main-desc"); // 👈 NUEVO
-
-  if (mainTitleEl) mainTitleEl.innerText = current.title;
-  if (mainTimeEl)
-    mainTimeEl.innerText = `${current.start} - ${current.end} · ${current.category}`;
-  if (mainImgEl) mainImgEl.src = current.img;
-  if (mainDescEl) mainDescEl.textContent = getProgramDescription(current); // 👈 NUEVO
-
-  // Card "Estás viendo" (si aún existe en el strip)
-  updateCard("current", current);
-
-  // Cards del slider:
-  updateCard("next", next);
-  updateCard("later", later);
-  updateCard("soon", soon);
-  updateCard("verysoon", verySoon);
-}
-
-/**
- * Rellena el card destacado del home con el programa actual.
- */
-function updateHomeHeroLiveHighlight() {
-  const titleEl = document.getElementById("home-live-title");
-  const timeEl = document.getElementById("home-live-time");
-  const descEl = document.getElementById("home-live-desc");
-  const imgEl  = document.getElementById("home-live-img");
-
-  // Si no existe el card, no hacemos nada
-  if (!titleEl && !timeEl && !descEl && !imgEl) return;
-
-  const now = new Date();
-  const day = now.getDay(); // 0 domingo, 6 sábado
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const currentTime = `${hour.toString().padStart(2, "0")}:${minute
-    .toString()
-    .padStart(2, "0")}`;
-
-  // Misma lógica que en el carrusel
-  const schedule = day === 6 || day === 0 ? scheduleWeekend : scheduleWeek;
-
-  let currentIndex = schedule.findIndex(
-    (p) => p.start <= currentTime && p.end > currentTime
-  );
-  if (currentIndex === -1) currentIndex = schedule.length - 1;
-
-  const current = getProgram(schedule, currentIndex, 0);
-
-  if (titleEl) titleEl.textContent = current.title;
-  if (timeEl)  timeEl.textContent  = `${current.start} – ${current.end} · ${current.category}`;
-  if (descEl)  descEl.textContent  = getProgramDescription(current);
-  if (imgEl) {
-    imgEl.src = current.img;
-    imgEl.alt = current.title;
-  }
-}
-
-function updateHomeLeftSlider() {
-  const now = new Date();
-  const day = now.getDay();
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const currentTime = `${hour.toString().padStart(2,"0")}:${minute.toString().padStart(2,"0")}`;
-
-  const schedule = (day === 6 || day === 0) ? scheduleWeekend : scheduleWeek;
-
-  let idx = schedule.findIndex(p => p.start <= currentTime && p.end > currentTime);
-  if (idx === -1) idx = schedule.length - 1;
-
-  const blocks = [
-    { prefix: "pc-current", data: getProgram(schedule, idx, 0) },
-    { prefix: "pc-next", data: getProgram(schedule, idx, 1) },
-    { prefix: "pc-later", data: getProgram(schedule, idx, 2) }
-  ];
-
-  blocks.forEach(b => {
-    if (!b.data) return;
-
-    const p = b.data;
-    const desc = getProgramDescription(p);
-
-    document.getElementById(`${b.prefix}-img`).src = p.img;
-    document.getElementById(`${b.prefix}-img`).alt = p.title;
-    document.getElementById(`${b.prefix}-title`).textContent = p.title;
-    document.getElementById(`${b.prefix}-time`).textContent = `${p.start} – ${p.end}`;
-    document.getElementById(`${b.prefix}-cat`).textContent = p.category;
-    document.getElementById(`${b.prefix}-desc`).textContent = desc;
-  });
-}
-
 // ========================================
-// PROGRAMACIÓN — PÁGINA programacion.php
+// LÓGICA DE PROGRAMACIÓN (EN VIVO / HOME / PROGRAMACIÓN)
 // ========================================
-
-/**
- * Devuelve el arreglo de programación según el día de la semana JS.
- * jsDay: 0 = domingo ... 6 = sábado
- */
-function getScheduleForJsDay(jsDay) {
-  return jsDay === 0 || jsDay === 6 ? scheduleWeekend : scheduleWeek;
-}
 
 /**
  * Descripción genérica para cada tipo de programa.
- * Si luego agregas p.description en los arrays, se respeta esa.
+ * Si el slot viene con p.description desde BD, se respeta esa.
  */
 function getProgramDescription(p) {
+  if (!p) return "";
   if (p.description) return p.description;
 
   switch (p.category) {
@@ -360,6 +278,152 @@ function getProgramDescription(p) {
 }
 
 /**
+ * Actualiza panel lateral y strip de programación según la hora actual.
+ * Panel: "Ahora en vivo"
+ * Cards: A continuación / Más adelante / Próximamente / Muy pronto
+ */
+function updateCarousel() {
+  const now = new Date();
+  const day = now.getDay(); // 0 domingo, 6 sábado
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const currentTime = `${hour.toString().padStart(2, "0")}:${minute
+    .toString()
+    .padStart(2, "0")}`;
+
+  const schedule = getScheduleForJsDay(day);
+  if (!schedule || !schedule.length) return;
+
+  let currentIndex = schedule.findIndex(
+    (p) => p.start <= currentTime && p.end > currentTime
+  );
+  if (currentIndex === -1) currentIndex = schedule.length - 1;
+
+  // Bloques: actual + próximos 4
+  const current = getProgram(schedule, currentIndex, 0);
+  const next = getProgram(schedule, currentIndex, 1);
+  const later = getProgram(schedule, currentIndex, 2);
+  const soon = getProgram(schedule, currentIndex, 3);
+  const verySoon = getProgram(schedule, currentIndex, 4);
+
+  // Panel lateral EN VIVO (página en-vivo.php)
+  const mainTitleEl = document.getElementById("live-main-title");
+  const mainTimeEl = document.getElementById("live-main-time");
+  const mainImgEl = document.getElementById("live-main-img");
+  const mainDescEl = document.getElementById("live-main-desc");
+
+  if (current) {
+    if (mainTitleEl) mainTitleEl.innerText = current.title;
+    if (mainTimeEl)
+      mainTimeEl.innerText = `${current.start} - ${current.end} · ${current.category}`;
+    if (mainImgEl) {
+      mainImgEl.src = current.img;
+      mainImgEl.alt = current.title || "";
+    }
+    if (mainDescEl) mainDescEl.textContent = getProgramDescription(current);
+  }
+
+  // Card "Estás viendo" (si aún existe en el strip)
+  updateCard("current", current);
+
+  // Cards del slider:
+  updateCard("next", next);
+  updateCard("later", later);
+  updateCard("soon", soon);
+  updateCard("verysoon", verySoon);
+}
+
+/**
+ * Rellena el card destacado del home con el programa actual.
+ */
+function updateHomeHeroLiveHighlight() {
+  const titleEl = document.getElementById("home-live-title");
+  const timeEl = document.getElementById("home-live-time");
+  const descEl = document.getElementById("home-live-desc");
+  const imgEl = document.getElementById("home-live-img");
+
+  // Si no existe el card, no hacemos nada
+  if (!titleEl && !timeEl && !descEl && !imgEl) return;
+
+  const now = new Date();
+  const day = now.getDay(); // 0 domingo, 6 sábado
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const currentTime = `${hour.toString().padStart(2, "0")}:${minute
+    .toString()
+    .padStart(2, "0")}`;
+
+  const schedule = getScheduleForJsDay(day);
+  if (!schedule || !schedule.length) return;
+
+  let currentIndex = schedule.findIndex(
+    (p) => p.start <= currentTime && p.end > currentTime
+  );
+  if (currentIndex === -1) currentIndex = schedule.length - 1;
+
+  const current = getProgram(schedule, currentIndex, 0);
+  if (!current) return;
+
+  if (titleEl) titleEl.textContent = current.title;
+  if (timeEl)
+    timeEl.textContent = `${current.start} – ${current.end} · ${current.category}`;
+  if (descEl) descEl.textContent = getProgramDescription(current);
+  if (imgEl) {
+    imgEl.src = current.img;
+    imgEl.alt = current.title;
+  }
+}
+
+/**
+ * Slider izquierda (si lo usas en alguna versión desktop).
+ */
+function updateHomeLeftSlider() {
+  const now = new Date();
+  const day = now.getDay();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const currentTime = `${hour.toString().padStart(2, "0")}:${minute
+    .toString()
+    .padStart(2, "0")}`;
+
+  const schedule = getScheduleForJsDay(day);
+  if (!schedule || !schedule.length) return;
+
+  let idx = schedule.findIndex(
+    (p) => p.start <= currentTime && p.end > currentTime
+  );
+  if (idx === -1) idx = schedule.length - 1;
+
+  const blocks = [
+    { prefix: "pc-current", data: getProgram(schedule, idx, 0) },
+    { prefix: "pc-next", data: getProgram(schedule, idx, 1) },
+    { prefix: "pc-later", data: getProgram(schedule, idx, 2) }
+  ];
+
+  blocks.forEach((b) => {
+    if (!b.data) return;
+
+    const p = b.data;
+    const desc = getProgramDescription(p);
+
+    const imgEl = document.getElementById(`${b.prefix}-img`);
+    const titleEl = document.getElementById(`${b.prefix}-title`);
+    const timeEl = document.getElementById(`${b.prefix}-time`);
+    const catEl = document.getElementById(`${b.prefix}-cat`);
+    const descEl = document.getElementById(`${b.prefix}-desc`);
+
+    if (imgEl) {
+      imgEl.src = p.img;
+      imgEl.alt = p.title;
+    }
+    if (titleEl) titleEl.textContent = p.title;
+    if (timeEl) timeEl.textContent = `${p.start} – ${p.end}`;
+    if (catEl) catEl.textContent = p.category;
+    if (descEl) descEl.textContent = desc;
+  });
+}
+
+/**
  * Renderiza la lista completa de programación para un día concreto.
  * jsDay: 0 = domingo ... 6 = sábado
  * dateObj: instancia de Date de ese día (para el título).
@@ -370,12 +434,34 @@ function renderScheduleForDay(jsDay, dateObj) {
   if (!listEl || !titleEl) return;
 
   const schedule = getScheduleForJsDay(jsDay);
+  if (!schedule || !schedule.length) {
+    titleEl.textContent = "No hay programación configurada para este día.";
+    listEl.innerHTML = "";
+    return;
+  }
+
   const months = [
-    "enero","febrero","marzo","abril","mayo","junio",
-    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre"
   ];
   const weekdaysLong = [
-    "domingo","lunes","martes","miércoles","jueves","viernes","sábado"
+    "domingo",
+    "lunes",
+    "martes",
+    "miércoles",
+    "jueves",
+    "viernes",
+    "sábado"
   ];
 
   const dd = String(dateObj.getDate()).padStart(2, "0");
@@ -420,7 +506,7 @@ function renderScheduleForDay(jsDay, dateObj) {
 
     if (isCurrent) {
       ctaHtml = `
-        <a href="./en-vivo" class="schedule-live-link">
+        <a href="./en-vivo.php" class="schedule-live-link">
           <i class="fa-solid fa-play"></i>
           <span>EN VIVO en NZKtvGO Play</span>
         </a>
@@ -483,10 +569,28 @@ function initSchedulePage() {
   const monday = new Date(now);
   monday.setDate(now.getDate() + mondayOffset);
 
-  const weekdayShortMondayFirst = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  const weekdayShortMondayFirst = [
+    "Lun",
+    "Mar",
+    "Mié",
+    "Jue",
+    "Vie",
+    "Sáb",
+    "Dom"
+  ];
   const months = [
-    "enero","febrero","marzo","abril","mayo","junio",
-    "julio","agosto","septiembre","octubre","noviembre","diciembre"
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre"
   ];
 
   let activeSet = false;
@@ -543,10 +647,62 @@ function initSchedulePage() {
 }
 
 // ========================================
-// UI: menú móvil + init global
+// Carrusel Programas (home)
 // ========================================
 
-document.addEventListener("DOMContentLoaded", () => {
+function initProgramasCarousel() {
+  const section = document.querySelector(".section-carousel-programas");
+  if (!section) return;
+
+  const track = section.querySelector("[data-carousel-track='programas']");
+  const prevBtn = section.querySelector(".carousel-arrow--prev");
+  const nextBtn = section.querySelector(".carousel-arrow--next");
+
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const getStep = () => {
+    const card = track.querySelector(".video-card--programa");
+    if (!card) return 300;
+    const cardStyles = window.getComputedStyle(card);
+    const gap = parseFloat(
+      window.getComputedStyle(track).columnGap ||
+        cardStyles.marginRight ||
+        16
+    );
+    return card.getBoundingClientRect().width + gap;
+  };
+
+  prevBtn.addEventListener("click", () => {
+    const step = getStep();
+    track.scrollBy({ left: -step, behavior: "smooth" });
+  });
+
+  nextBtn.addEventListener("click", () => {
+    const step = getStep();
+    track.scrollBy({ left: step, behavior: "smooth" });
+  });
+}
+
+// ========================================
+// INIT GLOBAL
+// ========================================
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // --- Splash NZK tvGO ---
+  const splash = document.getElementById("app-splash");
+  const alreadyShown = sessionStorage.getItem("nzk_splash_shown");
+
+  if (splash) {
+    if (alreadyShown) {
+      splash.classList.add("is-hidden");
+    } else {
+      setTimeout(() => {
+        splash.classList.add("is-hidden");
+        sessionStorage.setItem("nzk_splash_shown", "1");
+      }, 1800);
+    }
+  }
+
   // Toggle menú en móvil
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".main-nav");
@@ -555,6 +711,9 @@ document.addEventListener("DOMContentLoaded", () => {
       nav.classList.toggle("nav-open");
     });
   }
+
+  // Cargar parrilla desde BD antes de usarla
+  await loadScheduleData();
 
   // Player en vivo (solo en en-vivo.php)
   const video = document.getElementById("videoPlayer");
@@ -579,60 +738,15 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateHomeHeroLiveHighlight, 60000);
   }
 
+  // Slider izquierdo (si usas los IDs pc-current/pc-next/pc-later)
+  if (document.getElementById("pc-current-title")) {
+    updateHomeLeftSlider();
+    setInterval(updateHomeLeftSlider, 60000);
+  }
+
   // Página de programación
   initSchedulePage();
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Ocultar splash de NZK tvGO ---
-  const splash = document.getElementById("app-splash");
-
-  // Opción: no mostrar splash si ya se vio en esta sesión
-  const alreadyShown = sessionStorage.getItem("nzk_splash_shown");
-
-  if (splash) {
-    if (alreadyShown) {
-      // Si ya se mostró antes, lo ocultamos rápido
-      splash.classList.add("is-hidden");
-    } else {
-      // Mostramos 1.8s y lo ocultamos
-      setTimeout(() => {
-        splash.classList.add("is-hidden");
-        sessionStorage.setItem("nzk_splash_shown", "1");
-      }, 1800);
-    }
-  }
-});
-
-function initProgramasCarousel() {
-  const section = document.querySelector(".section-carousel-programas");
-  if (!section) return;
-
-  const track = section.querySelector("[data-carousel-track='programas']");
-  const prevBtn = section.querySelector(".carousel-arrow--prev");
-  const nextBtn = section.querySelector(".carousel-arrow--next");
-
-  if (!track || !prevBtn || !nextBtn) return;
-
-  const getStep = () => {
-    const card = track.querySelector(".video-card--programa");
-    if (!card) return 300;
-    const cardStyles = window.getComputedStyle(card);
-    const gap = parseFloat(window.getComputedStyle(track).columnGap || cardStyles.marginRight || 16);
-    return card.getBoundingClientRect().width + gap;
-  };
-
-  prevBtn.addEventListener("click", () => {
-    const step = getStep();
-    track.scrollBy({ left: -step, behavior: "smooth" });
-  });
-
-  nextBtn.addEventListener("click", () => {
-    const step = getStep();
-    track.scrollBy({ left: step, behavior: "smooth" });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
+  // Carrusel de programas
   initProgramasCarousel();
 });

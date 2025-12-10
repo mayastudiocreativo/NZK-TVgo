@@ -2281,3 +2281,43 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+.file-input-wrapper {
+  margin-bottom: 0.9rem;
+}
+
+.file-input-wrapper:hover {
+  cursor: pointer;
+}
+
+.file-input-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: #111827;
+  border: 1px solid rgba(148,163,184,0.8);
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  cursor: pointer;
+  gap: 0.35rem;
+}
+
+.file-input-label span.icon {
+  font-size: 0.9rem;
+}
+
+.file-input-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-input-helper {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}

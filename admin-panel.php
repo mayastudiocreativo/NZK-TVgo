@@ -224,6 +224,16 @@ function clean($v) {
             <a href="admin-promo.php" class="btn-primary">🌟 Gestionar card de promoción</a>
         </div>
     </article>
+    <article class="panel-card">
+    <div>
+        <h2>Parrilla de programación</h2>
+        <p>Editar los bloques horarios de la programación diaria (Lunes a Domingo).</p>
+    </div>
+    <div class="panel-card-footer">
+        <a href="admin-parrilla.php" class="btn-primary">📺 Editar parrilla</a>
+    </div>
+</article>
+
 
     <?php if ($currentRole === 'admin'): ?>
     <article class="panel-card">
@@ -235,6 +245,7 @@ function clean($v) {
             <a href="admin-users.php" class="btn-primary">👤 Gestionar usuarios</a>
         </div>
     </article>
+    
     <?php endif; ?>
 
 </main>
