@@ -1,3 +1,26 @@
+:root {
+  --color-bg-main: #050b18;
+  --color-bg-elevated: #020617;
+  --color-bg-panel: #0b1020;
+  --color-bg-soft: #111827;
+
+  --color-text-main: #f5f7ff;
+  --color-text-muted: #9ca3af;
+
+  --color-primary: #4f8cff;
+  --color-primary-soft: rgba(79, 140, 255, 0.45);
+  --color-primary-dark: #1d4ed8;
+
+  --color-accent-orange: #ff9f3c;
+  --color-accent-violet: #9b5bff;
+
+  --color-danger: #ff4a4a;
+  --color-danger-strong: #dc2626;
+
+  --color-border-soft: rgba(148, 163, 184, 0.35);
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+}
+
 /* ============================================
    RESET BÁSICO
 ============================================ */
@@ -10,8 +33,8 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #050b18;
-  color: #f5f7ff;
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
 }
 
 a {
@@ -87,7 +110,7 @@ img {
 
 .main-nav a.nav-live {
   font-weight: 600;
-  color: #ff4a4a;
+  color: var(--color-danger);
 }
 
 .live-dot {
@@ -95,7 +118,7 @@ img {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: #ff4a4a;
+  background: var(--color-danger);
   box-shadow: 0 0 8px rgba(255, 74, 74, 0.9);
 }
 
@@ -121,7 +144,7 @@ img {
   border-radius: 999px;
   border: 1.3px solid transparent;
   background:
-    linear-gradient(#050b18, #050b18) padding-box,
+    linear-gradient(var(--color-bg-main), var(--color-bg-main)) padding-box,
     linear-gradient(90deg, #ff005e, #00c6ff, #8a2cff) border-box;
   display: inline-flex;
   align-items: center;
@@ -265,7 +288,7 @@ img {
   box-shadow: 0 14px 30px rgba(37, 99, 255, 0.45);
   transform: translateY(0);
   transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-  color: #050b18;
+  color: var(--color-bg-main);
 }
 
 .hero-actions .btn.primary:hover {
@@ -366,8 +389,8 @@ img {
   font-size: 0.95rem;
   border: 1px solid transparent;
   background:
-    linear-gradient(#050b18, #050b18) padding-box,
-    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
+    linear-gradient(var(--color-bg-main), var(--color-bg-main)) padding-box,
+    linear-gradient(90deg, var(--color-danger), #ff9f3c, var(--color-primary), #9b5bff) border-box;
 }
 
 /* Versión del panel en el home reutilizando estilos del EN VIVO */
@@ -445,7 +468,7 @@ img {
 
 .card {
   position: relative;
-  background: #0b1020;
+  background: var(--color-bg-panel);
   border-radius: 0.9rem;
   padding: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -463,15 +486,15 @@ img {
 .card:hover {
   border: 1.7px solid transparent;
   background:
-    linear-gradient(#0b1020, #0b1020) padding-box,
-    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+    linear-gradient(var(--color-bg-panel), var(--color-bg-panel)) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, var(--color-primary), #8a2cff) border-box;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
   transform: translateY(-4px);
 }
 
 .video-date {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   margin: 4px 0 6px;
 }
 
@@ -518,8 +541,8 @@ img {
 }
 
 .btn.primary {
-  background: #4f8cff;
-  color: #050b18;
+  background: var(--color-primary);
+  color: var(--color-bg-main);
 }
 
 .btn.secondary {
@@ -546,7 +569,7 @@ img {
 /* Franja superior de color */
 .footer-top-bar {
   height: 4px;
-  background: linear-gradient(90deg, #ff4a4a, #f2b35b, #4f8cff);
+  background: linear-gradient(90deg, var(--color-danger), #f2b35b, var(--color-primary));
 }
 
 /* Bloque principal de columnas */
@@ -611,7 +634,7 @@ img {
 
 .footer-column-links a:hover {
   opacity: 1;
-  color: #4f8cff;
+  color: var(--color-primary);
 }
 
 /* Redes y stores */
@@ -638,8 +661,8 @@ img {
 }
 
 .footer-social-icons a:hover {
-  background: #4f8cff;
-  color: #050b18;
+  background: var(--color-primary);
+  color: var(--color-bg-main);
   transform: translateY(-2px);
 }
 
@@ -879,7 +902,7 @@ img {
 
 /* PANEL LATERAL EN VIVO */
 .live-meta-panel {
-  background: #0b1020;
+  background: var(--color-bg-panel);
   border-radius: 1rem;
   padding: 1.2rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -914,14 +937,14 @@ img {
   gap: 0.35rem;
   font-size: 0.75rem;
   text-transform: uppercase;
-  color: #ff4a4a;
+  color: var(--color-danger);
 }
 
 .live-tag::before {
   content: "";
   width: 8px;
   height: 8px;
-  background: #ff4a4a;
+  background: var(--color-danger);
   border-radius: 999px;
   box-shadow: 0 0 6px rgba(255, 74, 74, 0.9);
 }
@@ -956,11 +979,11 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  color: #f5f7ff;
+  color: var(--color-text-main);
   text-align: center;
   background:
-    linear-gradient(#050b18, #050b18) padding-box,
-    linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box;
+    linear-gradient(var(--color-bg-main), var(--color-bg-main)) padding-box,
+    linear-gradient(90deg, var(--color-danger), #ff9f3c, var(--color-primary), #9b5bff) border-box;
 }
 
 .btn-live-cta i {
@@ -979,8 +1002,8 @@ img {
 @media (min-width: 1025px) {
   .live-meta-panel .btn-live-cta {
     background:
-      linear-gradient(#050b18, #050b18) padding-box,
-      linear-gradient(90deg, #ff4a4a, #ff9f3c, #4f8cff, #9b5bff) border-box !important;
+      linear-gradient(var(--color-bg-main), var(--color-bg-main)) padding-box,
+      linear-gradient(90deg, var(--color-danger), #ff9f3c, var(--color-primary), #9b5bff) border-box !important;
     border: 1.4px solid transparent !important;
     color: #ffffff;
   }
@@ -1012,7 +1035,7 @@ img {
 /* Card base como banner */
 .live-card {
   position: relative;
-  background: #0b1020;
+  background: var(--color-bg-panel);
   border-radius: 1.25rem;
   padding: 0.75rem 0.75rem 0.9rem;
   display: flex;
@@ -1031,8 +1054,8 @@ img {
 .live-card:hover {
   border: 1.7px solid transparent;
   background:
-    linear-gradient(#0b1020, #0b1020) padding-box,
-    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+    linear-gradient(var(--color-bg-panel), var(--color-bg-panel)) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, var(--color-primary), #8a2cff) border-box;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
   transform: translateY(-4px);
 }
@@ -1075,7 +1098,7 @@ img {
 .live-card-category {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #4f8cff;
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -1260,7 +1283,7 @@ img {
   display: flex;
   overflow-x: auto;
   border-radius: 999px;
-  background: #020617;
+  background: var(--color-bg-elevated);
   scrollbar-width: thin;
 }
 
@@ -1278,7 +1301,7 @@ img {
   flex: 1 0 auto;
   min-width: 140px;
   padding: 16px 24px;
-  background: #020617;
+  background: var(--color-bg-elevated);
   border: none;
   border-right: 1px solid rgba(15, 23, 42, 0.9);
   cursor: pointer;
@@ -1322,7 +1345,7 @@ img {
   display: block;
   font-size: 13px;
   font-weight: 500;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* Activo */
@@ -1728,7 +1751,7 @@ img {
     border-radius: 999px;
     font-size: 0.9rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #4f8cff, #2563eb);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
     color: #f9fafb;
     margin-top: 0.8rem;
     width: fit-content;
@@ -1766,7 +1789,7 @@ img {
 .program-meta {
   margin: 0;
   font-size: 0.85rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* grid de episodios */
@@ -1848,7 +1871,7 @@ img {
 
 .program-meta {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* RESPONSIVE */
@@ -1880,7 +1903,7 @@ img {
 .program-meta {
   margin: 0;
   font-size: 0.85rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* Responsive hero */
@@ -1942,8 +1965,8 @@ img {
   /* truco del borde degradado reutilizando el mismo degradado que .card:hover */
   border: 1.5px solid transparent;
   background:
-    linear-gradient(#020617, #020617) padding-box,
-    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+    linear-gradient(var(--color-bg-elevated), var(--color-bg-elevated)) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, var(--color-primary), #8a2cff) border-box;
 
   box-shadow: 0 14px 35px rgba(15, 23, 42, 0.9);
   transition:
@@ -1955,7 +1978,7 @@ img {
 .episode-thumb {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #020617;
+  background: var(--color-bg-elevated);
   overflow: hidden;
 }
 
@@ -1985,7 +2008,7 @@ img {
 .episode-meta {
   margin: 0 0 0.35rem;
   font-size: 0.78rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 .episode-description {
@@ -2024,7 +2047,7 @@ img {
 
 .program-meta {
   font-size: 0.85rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 /* RESPONSIVE */
@@ -2048,7 +2071,7 @@ img {
 /* Base limpia sin bordes visibles */
 .episode-card {
   border: none !important;
-  background: #0b1020;
+  background: var(--color-bg-panel);
   border-radius: 1.2rem;
   padding: 0.9rem;
   transition: all 0.22s ease;
@@ -2057,15 +2080,15 @@ img {
 /* El contenedor interno tampoco debe tener borde */
 .episode-link {
   border: none !important;
-  background: #0b1020;
+  background: var(--color-bg-panel);
 }
 
 /* Hover con borde degradado estilo NZK */
 .episode-card:hover {
   border: 1.8px solid transparent !important;
   background:
-    linear-gradient(#0b1020, #0b1020) padding-box,
-    linear-gradient(90deg, #ff005e, #ff9f3c, #4f8cff, #8a2cff) border-box;
+    linear-gradient(var(--color-bg-panel), var(--color-bg-panel)) padding-box,
+    linear-gradient(90deg, #ff005e, #ff9f3c, var(--color-primary), #8a2cff) border-box;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
   transform: translateY(-4px);
 }
@@ -2318,6 +2341,8 @@ img {
 
 .file-input-helper {
   font-size: 0.78rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
+
+

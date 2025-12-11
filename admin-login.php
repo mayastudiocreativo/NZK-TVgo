@@ -2,18 +2,29 @@
 require __DIR__ . '/includes/session.php';
 require __DIR__ . '/includes/db.php';
 
+function clean($v) {
+    return htmlspecialchars($v ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+// Si ya está logueado, al panel
 if (isset($_SESSION['user_id'])) {
     header('Location: admin-panel.php');
     exit;
 }
 
-$error = '';
+$error        = '';
+$selectedUser = '';
 
+// Obtener lista de usuarios registrados para mostrarlos
+$usersStmt = $pdo->query("SELECT id, username, role FROM cms_users ORDER BY username ASC");
+$users = $usersStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Manejo del login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['user'] ?? '');
-    $password = trim($_POST['pass'] ?? '');
+    $username     = trim($_POST['user'] ?? '');
+    $password     = trim($_POST['pass'] ?? '');
+    $selectedUser = $username;
 
-    // Pequeño límite de longitud para evitar entradas absurdamente grandes
     if (mb_strlen($username) > 100 || mb_strlen($password) > 1000) {
         $error = 'Datos de acceso inválidos.';
     } elseif ($username !== '' && $password !== '') {
@@ -22,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            // Regenerar el ID de sesión DESPUÉS de validar credenciales
             session_regenerate_id(true);
 
             $_SESSION['user_id']   = $user['id'];
@@ -32,12 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: admin-panel.php');
             exit;
         } else {
-            // Pequeño delay para hacer un poco más costosos los ataques de fuerza bruta
-            usleep(300000); // 0.3 segundos
+            usleep(300000);
             $error = 'Usuario o contraseña incorrectos.';
         }
     } else {
-        $error = 'Completa usuario y contraseña.';
+        $error = 'Selecciona un usuario y escribe la contraseña.';
     }
 }
 ?>
@@ -45,109 +54,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login CMS – NZK Videos</title>
+    <title>Login CMS – NZK tvGo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #1e293b, #020617 60%);
-            color: #f9fafb;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-card {
-            background: #020617;
-            border-radius: 1.2rem;
-            padding: 2rem 2.4rem;
-            width: 100%;
-            max-width: 380px;
-            border: 1px solid rgba(148,163,184,0.35);
-            box-shadow: 0 26px 55px rgba(15,23,42,0.85);
-        }
-        .login-title {
-            margin: 0 0 0.25rem;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .login-subtitle {
-            margin: 0 0 1.4rem;
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-        label {
-            display: block;
-            font-size: 0.85rem;
-            margin-bottom: 0.25rem;
-            color: #cbd5f5;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.55rem 0.7rem;
-            border-radius: 0.55rem;
-            border: 1px solid rgba(148,163,184,0.4);
-            background: #020617;
-            color: #f9fafb;
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 0.6rem 0.9rem;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            background: linear-gradient(90deg,#ff4a4a,#ff9f3c,#4f8cff,#9b5bff);
-            color: #020617;
-            margin-top: 0.4rem;
-        }
-        .btn-primary:hover { filter: brightness(1.05); }
-        .login-error {
-            background: rgba(239,68,68,0.1);
-            border: 1px solid rgba(239,68,68,0.7);
-            color: #fecaca;
-            font-size: 0.8rem;
-            padding: 0.45rem 0.6rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.8rem;
-        }
-        .login-footer {
-            margin-top: 1.3rem;
-            font-size: 0.78rem;
-            color: #6b7280;
-            text-align: center;
-        }
-    </style>
+    <!-- 🔗 solo enlazamos admin.css -->
+    <link rel="stylesheet" href="assets/css/admin.css">
 </head>
-<body>
+<body class="admin-page admin-login">
 
 <div class="login-card">
-    <h1 class="login-title">Acceso al CMS</h1>
-    <p class="login-subtitle">NZK Noticias en video / NZK Productora</p>
+    <header class="login-header">
+        <div class="login-logo-circle">
+            <!-- Cambia el src si tu logo tiene otro nombre o ruta -->
+            <img src="img/iconIOS/icon.png" alt="NZK tvGo">
+        </div>
+        <div class="login-title-block">
+            <h1>NZK tvGo · CMS</h1>
+            <p>Sistema de gestión de programas y videos.</p>
+        </div>
+    </header>
+
+    <p class="login-section-title">Selecciona tu usuario</p>
+    <p class="login-section-subtitle">
+        Elige un usuario del CMS y luego ingresa la contraseña.
+    </p>
+
+    <?php if (!empty($users)): ?>
+        <div class="user-list">
+            <?php foreach ($users as $u): ?>
+                <?php
+                    $uname   = $u['username'];
+                    $initial = strtoupper(mb_substr($uname, 0, 2, 'UTF-8'));
+                    $role    = ($u['role'] === 'admin') ? 'Administrador' : 'Editor';
+                ?>
+                <button type="button"
+                        class="user-card"
+                        data-username="<?= clean($uname) ?>">
+                    <div class="user-avatar"><?= clean($initial) ?></div>
+                    <div class="user-meta">
+                        <span class="user-name"><?= clean($uname) ?></span>
+                        <span class="user-role"><?= clean($role) ?></span>
+                    </div>
+                </button>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p class="no-users">Aún no hay usuarios registrados en el CMS.</p>
+    <?php endif; ?>
 
     <?php if ($error): ?>
         <div class="login-error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
     <form method="post" action="admin-login.php" autocomplete="off">
-        <label for="user">Usuario</label>
-        <input type="text" id="user" name="user" required>
+        <!-- usuario seleccionado -->
+        <input type="hidden" id="user" name="user" value="<?= clean($selectedUser) ?>">
+
+        <p class="login-helper">
+            Usuario seleccionado:
+            <strong id="selectedUserLabel">
+                <?= $selectedUser ? clean($selectedUser) : 'Selecciona un usuario de la lista' ?>
+            </strong>
+        </p>
 
         <label for="pass">Contraseña</label>
         <input type="password" id="pass" name="pass" required>
 
-        <button type="submit" class="btn-primary">Ingresar</button>
+        <button type="submit" class="btn-primary btn-login">Ingresar</button>
     </form>
 
     <p class="login-footer">
         NZK Televisión · Uso interno
     </p>
 </div>
+
+<script>
+(function() {
+    const userCards = document.querySelectorAll('.user-card');
+    const userInput = document.getElementById('user');
+    const selectedLabel = document.getElementById('selectedUserLabel');
+    const passInput = document.getElementById('pass');
+
+    function setSelected(username) {
+        if (!userInput || !selectedLabel) return;
+        userInput.value = username || '';
+        selectedLabel.textContent = username || 'Selecciona un usuario de la lista';
+
+        userCards.forEach(card => {
+            card.classList.toggle('is-selected', card.dataset.username === username);
+        });
+    }
+
+    userCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const username = card.dataset.username || '';
+            setSelected(username);
+            if (passInput) passInput.focus();
+        });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const current = userInput ? userInput.value : '';
+        if (current) {
+            setSelected(current);
+        } else if (userCards.length > 0) {
+            setSelected(userCards[0].dataset.username || '');
+        }
+    });
+})();
+</script>
 
 </body>
 </html>

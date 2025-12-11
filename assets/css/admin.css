@@ -1,0 +1,673 @@
+/* ============================================
+   NZK – Estilos del CMS (admin)
+   assets/css/admin.css
+============================================ */
+
+/* Paleta (alineada con style.css) */
+:root {
+  --color-bg-main: #050b18;
+  --color-bg-elevated: #020617;
+  --color-bg-panel: #0b1020;
+  --color-bg-soft: #111827;
+
+  --color-text-main: #f5f7ff;
+  --color-text-muted: #9ca3af;
+
+  --color-primary: #4f8cff;
+  --color-primary-soft: rgba(79, 140, 255, 0.45);
+  --color-primary-dark: #1d4ed8;
+
+  --color-danger: #ff4a4a;
+  --color-danger-strong: #dc2626;
+
+  --color-border-soft: rgba(148, 163, 184, 0.35);
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+/* Base para todas las pantallas admin */
+body.admin-page {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+}
+
+/* ======================
+   LOGIN CMS
+====================== */
+
+/* ======================
+   LOGIN CMS
+====================== */
+
+/* ======================
+   LOGIN CMS – NZK tvGo
+====================== */
+
+body.admin-page.admin-login {
+  margin: 0;
+  height: 100vh;                      /* ← cambia min-height por height */
+  overflow: hidden;                   /* ← evita scroll vertical */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;                         /* ← quita padding para evitar desbordes */
+  background:
+    radial-gradient(circle at top left, rgba(79, 140, 255, 0.35), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 159, 60, 0.25), transparent 55%),
+    var(--color-bg-main);
+  color: var(--color-text-main);
+}
+
+
+/* Tarjeta principal del login */
+.login-card {
+  background: var(--color-bg-elevated);
+  border-radius: 1.5rem;
+  padding: 2.1rem 2.3rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--color-border-soft);
+  box-shadow:
+    0 24px 80px rgba(15, 23, 42, 0.85),
+    0 0 0 1px rgba(15, 23, 42, 0.4);
+}
+
+/* ======================
+   CABECERA: LOGO + TITULO
+====================== */
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.login-logo-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.login-logo-circle img {
+  max-width: 40px;
+  max-height: 40px;
+  display: block;
+}
+
+.login-title-block h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.login-title-block p {
+  margin: 0.1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* ======================
+   TEXTOS DE SECCIÓN
+====================== */
+
+.login-section-title {
+  margin: 1.2rem 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.login-section-subtitle {
+  margin: 0 0 0.8rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+/* ======================
+   LISTA DE USUARIOS
+====================== */
+
+.user-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 480px) {
+  .user-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.user-card {
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.65);
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease,
+    transform 0.12s ease;
+}
+
+.user-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 35px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.user-card.is-selected {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.16);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.user-role {
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ======================
+   FORMULARIO / TEXTO AYUDA
+====================== */
+
+.login-helper {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.login-helper strong {
+  color: var(--color-text-main);
+}
+
+.login-card label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+/* INPUT DE CONTRASEÑA – Corrigiendo ancho y alineación */
+.login-card input[type="password"] {
+  width: 100%;
+  max-width: 100%;                   /* evita estirarse más que el contenedor */
+  display: block;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.8rem;             /* mismo radio que user-card */
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-size: 0.9rem;
+
+  box-sizing: border-box;            /* asegura ancho uniforme */
+  margin: 0 0 0.9rem 0;              /* separa del botón */
+}
+
+
+.login-card input[type="password"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+/* Botón principal del login
+   (usa tu .btn-primary global y solo ajustamos aquí) */
+
+.btn-primary.btn-login {
+  width: 100%;
+  margin-top: 0.1rem;
+}
+
+/* ======================
+   MENSAJES / PIE
+====================== */
+
+.login-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.7);
+  color: #fecaca;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.login-footer {
+  margin-top: 1.3rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.no-users {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.8rem;
+}
+
+
+/* ======================
+   TOPBAR CMS + USUARIO
+====================== */
+
+.cms-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto 1.8rem;
+}
+
+.cms-title-block h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.cms-title-block span {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.cms-user-box {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.cms-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top left, #4f46e5, var(--color-bg-elevated));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+}
+
+.cms-user-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cms-user-name {
+  font-size: 0.9rem;
+}
+
+.cms-user-role {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ======================
+   BOTONES
+====================== */
+
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  gap: 0.35rem;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-bg-main);
+  font-weight: 600;
+  box-shadow: 0 10px 30px var(--color-primary-soft);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 12px 34px rgba(37, 99, 235, 0.65);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+}
+
+.btn-secondary.small {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.btn-danger {
+  background: var(--color-danger-strong);
+  color: #fff;
+}
+
+.btn-edit {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+}
+
+/* ======================
+   LAYOUT + CARDS
+====================== */
+
+body.admin-panel,
+body.admin-videos,
+body.admin-programas,
+body.admin-users,
+body.admin-parrilla,
+body.admin-promo,
+body.admin-editar-bloque {
+  padding: 1.8rem 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--color-bg-panel);
+  border-radius: 1rem;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Panel principal (tarjetas grandes del dashboard) */
+.panel-grid {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-card {
+  background: radial-gradient(circle at top left, #0f172a, var(--color-bg-elevated) 85%);
+  border-radius: 1.1rem;
+  padding: 1.4rem 1.5rem 1.3rem;
+  border: 1px solid var(--color-border-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.panel-card:hover {
+  border-color: rgba(96, 165, 250, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.95);
+  background: radial-gradient(circle at top left, #111827, var(--color-bg-elevated) 90%);
+}
+
+.panel-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.panel-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  max-width: 420px;
+}
+
+.panel-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* ======================
+   FORMULARIOS / TABLAS
+====================== */
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+  color: #cbd5f5;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="datetime-local"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-main);
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th,
+td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  color: #cbd5f5;
+}
+
+tr:hover td {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.thumb-mini {
+  width: 80px;
+  height: 45px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--color-bg-soft);
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.16rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.25);
+  font-size: 0.72rem;
+}
+
+/* Mensajes / errores rápidos */
+.alert-error,
+.flash-error,
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.7);
+  color: #fecaca;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.flash-ok {
+  background: rgba(22, 163, 74, 0.12);
+  border: 1px solid #bbf7d0;
+  color: #bbf7d0;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Parrilla: bloques por día */
+.weekday-heading {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.weekday-block {
+  border-radius: 0.8rem;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border-soft);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.7rem;
+}
+
+/* Inputs de archivo (parrilla / promos) */
+.file-input-wrapper {
+  position: relative;
+  border-radius: 0.8rem;
+  border: 1px dashed rgba(148, 163, 184, 0.6);
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  cursor: pointer;
+}
+
+.file-input-label .icon {
+  font-size: 0.9rem;
+}
+
+.file-input-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+}
+
+.row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  body.admin-panel,
+  body.admin-videos,
+  body.admin-programas,
+  body.admin-users,
+  body.admin-parrilla,
+  body.admin-promo,
+  body.admin-editar-bloque {
+    padding: 1.5rem 1rem;
+  }
+
+  .cms-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel-card-footer {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .row-2 {
+    grid-template-columns: 1fr;
+  }
+}
